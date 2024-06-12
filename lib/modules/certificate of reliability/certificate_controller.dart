@@ -20,7 +20,7 @@ class ArtistController extends g.GetxController {
   Future certificate() async {
     try{
       certificateState(CertificateState.loading);
-      Response response=await dioApiService.postData( UrlsApi.certificateApi,
+      Response response=await dioApiService.postData( UrlsApi.verifyApi,
           data: {},
           options: Options(
             headers: {

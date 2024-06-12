@@ -1,6 +1,7 @@
 
 import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
+import 'package:untitled5/modules/navpar/navpar.dart';
 import 'package:untitled5/modules/register/registerr_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,7 @@ class RegisterrController extends g.GetxController {
   DioApiService dioApiService=DioApiService();
   String? message;
   Rx<RegisterState> registerState=RegisterState.init.obs;
-  Future register({required String apiUrl}) async {
+  Future register({required String apiUrl,required int role}) async {
     try{
       registerState(RegisterState.loading);
       Response response=await dioApiService.postData( apiUrl,
@@ -31,6 +32,10 @@ class RegisterrController extends g.GetxController {
       if(response.data!=null&&response.statusCode==200){
 if(response.data!['success']){
    AppSharedPreferences.saveToken(response.data["result"][0]['token']) ;
+   
+     AppSharedPreferences.saveRole(role) ;
+       AppSharedPreferences.saveId(response.data["result"][0]['id']) ;
+          g.  Get.to(Navpar());
         registerState(RegisterState.succsesful);
 
 

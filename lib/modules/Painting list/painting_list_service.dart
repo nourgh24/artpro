@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 class Addpainting {
   String paintingTiltle;
@@ -6,7 +6,7 @@ class Addpainting {
   String paintingSize;
   String paintingPrice;
   String paintingType;
-  Uint8List paintingImage;
+  File? paintingImage;
 
   Addpainting({
     required this.paintingTiltle,

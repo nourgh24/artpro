@@ -8,7 +8,8 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class Loginn extends StatefulWidget {
   final String apiUrl;
-  const Loginn({required this.apiUrl,super.key});
+  final int role;
+  const Loginn({required this.apiUrl,super.key, required this.role});
   @override
   State<Loginn> createState() => _LoginnState();
 }
@@ -190,7 +191,7 @@ Obx((){
   return  ElevatedButton(
     onPressed: () {
       if(form_Key.currentState!.validate()){
-        _controller.loginn(apiUrl:widget. apiUrl );
+        _controller.loginn(role: widget.role,apiUrl:widget. apiUrl );
       }
       //Get.offNamed(PageHome());
     },

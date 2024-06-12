@@ -29,7 +29,7 @@ class AddGalleryDetails extends StatelessWidget {
                           final image = imageController.selectedImages[index];
                           return Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: Image.memory(image),
+                            child: Image.file(image),
                           );
                         },
                       );

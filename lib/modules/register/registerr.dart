@@ -5,12 +5,14 @@ import 'package:email_otp/email_otp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:untitled5/modules/navpar/navpar.dart';
 import 'registerr_controller.dart';
 import 'package:email_otp/email_otp.dart';
 
 class Registerr extends StatefulWidget {
+  final int role;
   final String   apiUrl;
-  const Registerr({required this.apiUrl,super.key});
+  const Registerr({required this.apiUrl,required this.role,super.key});
 
   @override
   State<Registerr> createState() => _RegisterrState();
@@ -275,15 +277,9 @@ class _RegisterrState extends State<Registerr> {
                         return CircularProgressIndicator();
                       }
 
-                      if (_controller.registerState.value==RegisterState.error){
+                   
 
-                      }
-
-                      if (_controller.registerState.value==RegisterState.succsesful){
-
-                        Get.to(ConfrimCode(email: _controller.emailController.text,));
-
-                      }
+                   
                       return ElevatedButton(
                         onPressed: () {
                           /* async{
@@ -309,6 +305,7 @@ class _RegisterrState extends State<Registerr> {
 
                           if(form_Key.currentState!.validate()) {
                             _controller.register(
+                              role: widget.role,
                               apiUrl: widget.apiUrl
                             );
                             return form_Key.currentState!.save() ;
@@ -350,10 +347,10 @@ class _RegisterrState extends State<Registerr> {
                           onPressed: () {
                             if(widget.apiUrl==UrlsApi.registerUserApi){
 
-                              Get.to(Loginn(apiUrl:UrlsApi.loginUserApi ));
+                              Get.to(Loginn(role: widget.role,apiUrl:UrlsApi.loginUserApi ));
 
                             }else{
-                              Get.to(Loginn(apiUrl:UrlsApi.loginArtistApi ));
+                              Get.to(Loginn(role:  widget.role,apiUrl:UrlsApi.loginArtistApi ));
 
                             }
 

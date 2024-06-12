@@ -33,16 +33,16 @@ class PaintingList extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 if (imageController.isSelecting.value) {
-                  imageController.selectImage(painting.paintingImage);
+                  imageController.selectImage(painting.paintingImage!);
                 }else{
-                  Get.to(()=>AddNewPainting(index: index,painting: painting));
+                  // Get.to(()=>AddNewPainting(index: index,painting: painting));
                 }
               },
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: Image.memory(
-                      painting.paintingImage,
+                    child: Image.file(
+                      painting.paintingImage!,
                       fit: BoxFit.cover,
                     ),
                   ),

@@ -1,245 +1,228 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'article_comments_controller.dart';
 import 'article_comments_service.dart';
 import 'package:get/get.dart';
 
+class CommentView extends StatefulWidget {
+  final String apiUrl;
+  final int id;
+  const CommentView({super.key, required this.apiUrl, required this.id});
+  @override
+  State<CommentView> createState() => _CommentViewState();
+}
 
-class CommentView extends StatelessWidget {
+class _CommentViewState extends State<CommentView> {
   final CommentController commentController = Get.put(CommentController());
+
   final TextEditingController commentControllerText = TextEditingController();
+
+  @override
+  void initState() {
+    commentController.getComments(apiUrl: widget.apiUrl, id: widget.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenwidth=MediaQuery.of(context).size.width;
-    double screenheight=MediaQuery.of(context).size.height;
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange[50],
         title: Row(
           children: [
-            SizedBox(width:screenwidth*0.001 ,),
-         /*   IconButton(onPressed:(){
+            SizedBox(
+              width: screenwidth * 0.001,
+            ),
+            /*   IconButton(onPressed:(){
               Get.back();
             },
               icon: Icon(Icons.arrow_back),
             ),*/
-            Text('Comments',style: TextStyle(color: Colors.blueGrey),),
+            Text(
+              'Comments',
+              style: TextStyle(color: Colors.blueGrey),
+            ),
           ],
         ),
       ),
-      body: Center(
-        child: Container(
-          width: screenwidth*0.95,
-          height: screenheight,
-          child: Column(
-            children: [
-              Expanded(
-                child: Obx(() {
-              return ListView.builder(
-              itemCount: commentController.comments.length,
-              itemBuilder: (context, index) {
-              Comment comment = commentController.comments[index];
-              return ListTile(
-          focusColor:Colors.blue,
-          //hoverColor,
-          //splashColor,
-          leading:CircleAvatar(
-              radius: 15,
-              backgroundImage: AssetImage('${commentController.image.value}'),
-            ),
-              title: Text('${commentController.name.value }'+ '   '+'${commentController.time.value}',
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-              subtitle:  Text(comment.content,style: TextStyle(color: Colors.black38),),
-              trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-              children: [
-              IconButton(
-              icon: Icon(Icons.edit,size: 15,),
-              onPressed: () {
-              // Code to edit comment
-              showDialog(
-              context: context,
-              builder: (context) {
-              TextEditingController editController = TextEditingController(text: comment.content);
-              return AlertDialog(
-              title: Text('Edit Comment'),
-              content: TextField(
-              controller: editController,
-              decoration: InputDecoration(hintText: 'Edit your comment'),
-              ),
-              actions: [
-              TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Get.back(),
-              ),
-              TextButton(
-              child: Text('Save'),
-              onPressed: () {
-              commentController.editComment(comment.id, editController.text);
-              Get.back();
-              },
-              ),
-              ],
-              );
-              },
-              );
-              },
-              ),
-              IconButton(
-              icon: Icon(Icons.delete,size: 15,),
-              onPressed: () {
-              commentController.deleteComment(comment.id);
-              },
-              ),
-              IconButton(
-              icon: Icon(Icons.thumb_up,size: 15,),
-              onPressed: () {
-              commentController.likeComment(comment.id);
-              },
-              ),
-          Text('${comment.likes}'),
-              IconButton(
-              icon: Icon(Icons.reply,size: 15,),
-              onPressed: () {
-              // Code to reply to comment
-              showDialog(
-              context: context,
-              builder: (context) {
-              TextEditingController replyController = TextEditingController();
-              return AlertDialog(
-              title: Text('Reply to Comment'),
-              content: TextField(
-              controller: replyController,
-              decoration: InputDecoration(hintText: 'Enter your reply'),
-              ),
-              actions: [
-              TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Get.back(),
-              ),
-              TextButton(
-              child: Text('Reply'),
-              onPressed: () {
-              commentController.addComment(replyController.text, parentId: comment.id);
-              Get.back();
-              },
-              ),
-              Obx(() {
-              return ListView.builder(
-              itemCount: commentController.comments.length,
-              itemBuilder: (context, index) {
-              commentController.getReplies(comment.id).map((reply) {
-              return ListTile(
-          focusColor:Colors.blue,
-          leading:CircleAvatar(
-            radius: 15,
-            backgroundImage: AssetImage('${commentController.image.value}'),
-          ) ,
-              title: Text('${commentController.name.value }'+ '   '+'${commentController.time.value}',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 15,
-            fontWeight: FontWeight.normal,
-          ),
-              ),
-              subtitle: Text(reply.content),
-              trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-              IconButton(
-              icon: Icon(Icons.edit,size: 15,),
-              onPressed: () {
-              // Code to edit reply
-              showDialog(
-              context: context,
-              builder: (context) {
-              TextEditingController editController = TextEditingController(text: reply.content);
-              return AlertDialog(
-              title: Text('Edit Reply'),
-              content: TextField(
-              controller: editController,
-              decoration: InputDecoration(hintText: 'Edit your reply'),
-              ),
-              actions: [
-              TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Get.back(),
-              ),
-              TextButton(
-              child: Text('Save'),
-              onPressed: () {
-              commentController.editComment(reply.id, editController.text);
-              Get.back();
-              },),],);},);},),
-              IconButton(
-              icon: Icon(Icons.delete,size: 15,),
-              onPressed: () {
-              commentController.deleteComment(reply.id);
-              },
-              ),
-              IconButton(
-              icon: Icon(Icons.thumb_up,size: 15,),
-              onPressed: () {
-              commentController.likeComment(reply.id);
-              },
-              ),
-          Text('${comment.likes}'),
-              ],
-              ),
-              );
-              }).toList();
-              },
-              );
-              }),
-              ],
-              );
-              },
-              );
-              },
-              ),
-              ],
-              ),
-              );
-              },
-              );
-              },
-              ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: commentControllerText,
-                        decoration: InputDecoration(
-                          hintText: 'Add a Comment.... ',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          suffixIcon: IconButton(
-                              icon: Icon(
-                                Icons.send,
-                              ),
-                              onPressed: () {
-                                if (commentControllerText.text.isNotEmpty) {
-                                  commentController.addComment(commentControllerText.text);
-                                  commentControllerText.clear();
-                                }
-                              }),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(
+              () {
+                if (commentController.commentState.value ==
+                    CommentState.loading) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (commentController.commentState.value ==
+                    CommentState.error) {
+                  return SizedBox();
+                }
+                return ListView.builder(
+                  itemCount: commentController.commentModel!.comment!.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      focusColor: Colors.blue,
+                      //hoverColor,
+                      //splashColor,
+                      leading: CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(commentController
+                                .commentModel!.comment![index].user!.image ??
+                            ""),
+                      ),
+                      title: Text(
+                        commentController
+                                .commentModel!.comment![index].user!.name ??
+                            "name" +
+                                '   ' +
+                                '${commentController.commentModel!.comment![index].date}',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
+                      subtitle: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  commentController.commentModel!
+                                      .comment![index].commentText!,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(color: Colors.black38),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              if (AppSharedPreferences.getId ==
+                                  commentController.commentModel!
+                                      .comment![index].user!.id) ...[
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 15,
+                                  ),
+                                  onPressed: () {
+
+                                       
+                                  showDialog(
+                                    context: context,
+                                  
+                                    builder: (context) {
+                                      TextEditingController editController =
+                                          TextEditingController(
+                                            text:  commentController.commentModel!
+                                      .comment![index].commentText!
+                                           );
+                                      return AlertDialog(
+                                        title: Text('Edit Comment'),
+                                        content: TextField(
+                                          controller: editController,
+                                          decoration: InputDecoration(
+                                              hintText: 'Edit your comment'),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('Cancel'),
+                                            onPressed: () => Get.back(),
+                                          ),
+                                          TextButton(
+                                            child: Text('Save'),
+                                            onPressed: () {
+
+                                                 commentController.updateComment(
+                                        commedntId: commentController
+                                            .commentModel!.comment![index].id!,
+                                        apiUrl: widget.apiUrl,
+                                        id: widget.id,
+                                        commentText:
+                                            editController.text);
+                                             
+                                            
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    size: 15,
+                                  ),
+                                  onPressed: () {
+                                    commentController.deleteComment(
+                                        commedntId: commentController
+                                            .commentModel!.comment![index].id!,
+                                        apiUrl: widget.apiUrl,
+                                        id: widget.id,
+                                        commentText:
+                                            commentControllerText.text);
+                                  },
+                                ),
+                              ],
+                              IconButton(
+                                icon: Icon(
+                                  Icons.thumb_up,
+                                  size: 15,
+                                ),
+                                onPressed: () {
+                                  // commentController.likeComment(comment.id);
+                                },
+                              ),
+                              // Text('${comment.likes}'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: commentControllerText,
+                    decoration: InputDecoration(
+                      hintText: 'Add a Comment.... ',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.send,
+                          ),
+                          onPressed: () {
+                            if (commentControllerText.text.isNotEmpty) {
+                              commentController.addComment(
+                                  apiUrl: widget.apiUrl,
+                                  id: widget.id,
+                                  commentText: commentControllerText.text);
+                              commentControllerText.clear();
+                            }
+                          }),
                     ),
-                  ],
+                  ),
                 ),
-              ),
               ],
-              ),
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
