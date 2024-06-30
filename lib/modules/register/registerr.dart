@@ -1,4 +1,5 @@
 import 'package:untitled5/Services/Network/urls_api.dart';
+import 'package:untitled5/modules/certificate%20of%20reliability/certificate.dart';
 import 'package:untitled5/modules/confrim%20code/confrim_code.dart';
 import 'package:untitled5/modules/login/loginn.dart';
 import 'package:email_otp/email_otp.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled5/modules/navpar/navpar.dart';
+import 'package:untitled5/modules/painting_home_page/page_home.dart';
 import 'registerr_controller.dart';
 import 'package:email_otp/email_otp.dart';
 
@@ -13,7 +15,7 @@ class Registerr extends StatefulWidget {
   final int role;
   final String   apiUrl;
   const Registerr({required this.apiUrl,required this.role,super.key});
-
+  
   @override
   State<Registerr> createState() => _RegisterrState();
 }
@@ -21,14 +23,17 @@ class Registerr extends StatefulWidget {
 class _RegisterrState extends State<Registerr> {
   final RegisterrController _controller = Get.put(RegisterrController());
   bool _obscuretext =true;
-  //String dropdownValue='User';
   EmailOTP myauth=EmailOTP();
   String errorTextVal='';
   final GlobalKey<FormState> form_Key=GlobalKey<FormState>();
 
+  int activeIndex=0;
 
   @override
   Widget build(BuildContext context) {
+     double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body:Form(
         key: form_Key,
@@ -65,12 +70,12 @@ class _RegisterrState extends State<Registerr> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 100,
+                      height: screenheight*0.1,
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(width: 40,),
+                        SizedBox(width: screenwidth*0.05,),
                         Text("REGISTER",
                           style: TextStyle(
                             color: Colors.black54,
@@ -80,7 +85,7 @@ class _RegisterrState extends State<Registerr> {
                           ),),
                       ],
                     ),
-                    SizedBox(height: 40,),
+                    SizedBox(height: screenheight*0.04,),
                     TextFormField(
                       controller: _controller.fullnameController,
                       validator: (input) {
@@ -112,8 +117,8 @@ class _RegisterrState extends State<Registerr> {
                       style: TextStyle(color: Colors.black54),
                     ),
                     SizedBox(
-                      height: 20,
-                      width: 10,
+                      height: screenheight*0.02,
+                      width: screenwidth *0.01,
                     ),
                 
                 
@@ -150,8 +155,8 @@ class _RegisterrState extends State<Registerr> {
                       style: TextStyle(color: Colors.black54),
                     ),
                     SizedBox(
-                      height: 20,
-                      width: 10,
+                      height: screenheight*0.02,
+                      width: screenwidth *0.01,
                     ),
                 
                     TextFormField(
@@ -160,8 +165,8 @@ class _RegisterrState extends State<Registerr> {
                       validator:  (input) {
                         if(input!.isEmpty || input==null){
                           return "Password can't be empty";
-                        }else if(input.length<6){
-                          return "Password must be of 6 characters";
+                        }else if(input.length<8){
+                          return "Password must be of 8 characters";
                         }else {
                           return null;
                         }
@@ -193,8 +198,8 @@ class _RegisterrState extends State<Registerr> {
                     ),
                 
                     SizedBox(
-                      height: 20,
-                      width: 10,
+                      height: screenheight*0.02,
+                      width: screenwidth *0.01,
                     ),
                 
                     TextFormField(
@@ -204,8 +209,8 @@ class _RegisterrState extends State<Registerr> {
 
                         if(input!.isEmpty || input==null){
                           return "Password can't be empty";
-                        }else if(input.length<6){
-                          return "Password must be of 6 characters";
+                        }else if(input.length<8){
+                          return "Password must be of 8 characters";
                         }else if(input!=_controller.passwordController.text){
                           return "Passwords do not match";
                         }
@@ -238,47 +243,14 @@ class _RegisterrState extends State<Registerr> {
                       style: TextStyle(color: Colors.black54),
                     ),
                     SizedBox(
-                      height: 20,
-                      width: 10,
+                      height: screenheight*0.02,
+                      width: screenwidth *0.01,
                     ),
                 
-                 /*   Padding(
-                      padding: const EdgeInsets.all(16.0),
-                        child:DropdownButtonFormField<String>(
-                          dropdownColor: Colors.white,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 25,
-                            isExpanded: true,
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 20,
-                            ),
-                            value:dropdownValue,
-                            onChanged: (String? newValue){
-                              setState(() {
-                                dropdownValue=newValue!;
-                              });
-                            },
-                        items:const[
-                          DropdownMenuItem<String>(
-                            value: 'User',child: Text('User'),),
-                    DropdownMenuItem<String>(
-                    value: 'Artist',child: Text('Artist'),),
-                    ],
-                        ),
-                    ),
-                */
-                    SizedBox(
-                      height: 30,
-                      width: 10,
-                    ),
                     Obx((){
                       if (_controller.registerState.value==RegisterState.loading){
                         return CircularProgressIndicator();
                       }
-
-                   
-
                    
                       return ElevatedButton(
                         onPressed: () {
@@ -302,17 +274,16 @@ class _RegisterrState extends State<Registerr> {
                             content: Text("Oops,OTP send failed"),
                           ));
                         }*/
+                         
 
                           if(form_Key.currentState!.validate()) {
+
                             _controller.register(
                               role: widget.role,
                               apiUrl: widget.apiUrl
                             );
                             return form_Key.currentState!.save() ;
                           }
-
-
-
                           //Get.offNamed(PageHome());
                         },
                         child: Text('Register',
@@ -321,7 +292,7 @@ class _RegisterrState extends State<Registerr> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:  Colors.orangeAccent,
+                          backgroundColor:  Colors.orange[300],
                           padding: EdgeInsets.fromLTRB(80,20,80,20),
                         ),
                       );

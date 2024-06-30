@@ -6,8 +6,6 @@ class PaintingModel {
   PaintingModel({required this.painting, required this.message, required this.code});
 
    PaintingModel.fromJson(Map<String, dynamic> json) {
-
-
         painting= Result.fromJson(json['result'][0]);
       message= json['result'][1];
       code= json['code'];

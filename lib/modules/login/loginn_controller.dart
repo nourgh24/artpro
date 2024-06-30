@@ -1,6 +1,8 @@
 import 'package:untitled5/Services/Helper/error_api_handler.dart';
 import 'package:untitled5/Services/Network/dio_api_service.dart';
+import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
+import 'package:untitled5/modules/confrim%20code/confrim_code.dart';
 import 'package:untitled5/modules/login/loginn_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,10 +16,10 @@ class LoginnController extends g.GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  LoginnService service = LoginnService();
-
   Rx<LogInState> logInState = LogInState.init.obs;
   String? message;
+  int activeIndex=0;
+
 
   Future loginn({required String apiUrl, required int role}) async {
     try {
@@ -28,15 +30,37 @@ class LoginnController extends g.GetxController {
       });
       if (response.data != null && response.statusCode == 200) {
         if (response.data!["success"]) {
+            if (activeIndex == 1) {
+
           AppSharedPreferences.saveToken(response.data!['result'][0]['token']);
           AppSharedPreferences.saveId(response.data["result"][0]['id']);
-
           AppSharedPreferences.saveRole(role);
           print("what is the token  ${AppSharedPreferences.getToken}");
+          print("wpppppppppp  ${AppSharedPreferences.getToken}");
 
+           Get.to(ConfrimCode(
+        role: 1,
+         apiUrl: UrlsApi.verifyUserApi,
+         email:"${emailController.text}" ,
+          ));
           logInState(LogInState.succsesful);
+            }
+          if (activeIndex == 0) {
+          AppSharedPreferences.saveToken(response.data!['result'][0]['token']);
+          AppSharedPreferences.saveId(response.data["result"][0]['id']);
+          AppSharedPreferences.saveRole(role);
+          print("what is the token  ${AppSharedPreferences.getToken}");
+          print("wpppppppppp  ${AppSharedPreferences.getToken}");
+
+           Get.to(ConfrimCode(
+        role: 0,
+         apiUrl: UrlsApi.verifyArtistApi,
+         email:"${emailController.text}" ,
+          ));
+
+            logInState(LogInState.error);
+          }
         } else {
-          logInState(LogInState.error);
 
           message = response.data!["data"];
           Get.snackbar('Error', message!);
@@ -53,8 +77,6 @@ class LoginnController extends g.GetxController {
       }
     }
 
-    service.loginn(emailController, passwordController);
-    // يمكنك هنا إضافة المنطق الخاص بتسجيل الدخول
     print('Email: ${emailController.text}');
     print('Password: ${passwordController.text}');
   }
@@ -65,45 +87,7 @@ class LoginnController extends g.GetxController {
     passwordController.dispose();
     super.dispose();
   }
-
-////////forgetPassword Firebase
-  /*void sendpasswordresetemail(String email)async{
-    await _auth.sendPasswordResentEmail(email:email).then((value){
-      Get.offAll('/Loginn');
-      Get.snackbar("Password Reset email link is been sent", "Success");
-    }).catchError((onError)=> Get.snackbar("Error In Email Reset", onError.massage));
-    }*/
-  /*
-    validateEmail(String? email) {//////////////////validation
-      if (!GetUtils.isEmail(email ?? '')) {
-        return 'Email is not valid';
-      }
-      return null;
-    }
-
-    validatePassword(String? pass) {
-      if (GetUtils.isNullOrBlank(pass ?? '') == null) {
-        return 'password is not valid';
-      }
-      return null;
-    }
-    Future onLogin() async {
-      if (formKey.currentState!.validate()) {
-        Get.snackbar('Success', 'Login Successful',
-          snackPosition: SnackPosition.BOTTOM,
-          colorText: CupertinoColors.secondarySystemGroupedBackground,
-          backgroundColor: CupertinoColors.systemGreen,
-        );
-        return;
-      }
-      Get.snackbar('Error', 'Login Validation failed',
-        snackPosition: SnackPosition.BOTTOM,
-        colorText: CupertinoColors.secondarySystemGroupedBackground,
-        backgroundColor: CupertinoColors.destructiveRed,
-      );
-    }*/
 }
-
 enum LogInState {
   init,
   succsesful,

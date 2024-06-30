@@ -1,0 +1,112 @@
+class ArticleDetailsModel {
+  Result? article;
+  String? message;
+  int? code;
+
+  ArticleDetailsModel({this.article, this.message, this.code});
+
+  ArticleDetailsModel.fromJson(Map<String, dynamic> json) {
+    if (json['result'] != null && json['result'].isNotEmpty) {
+      article = Result.fromJson(json['result'][0]);
+      message = json['result'][1];
+    }
+    code = json['code'];
+  }
+}
+
+class Result {
+  int? id;
+  String? title;
+  String? description;
+  String? url;
+  String? creationDate;
+  int? artistId;
+  int? interactionsNumber;
+  int? commentsNumber;
+  String? createdAt;
+  String? updatedAt;
+  String? formattedCreationDate;
+  Artist? artist;
+
+  Result({
+    this.id,
+    this.title,
+    this.description,
+    this.url,
+    this.creationDate,
+    this.artistId,
+    this.interactionsNumber,
+    this.commentsNumber,
+    this.createdAt,
+    this.updatedAt,
+    this.formattedCreationDate,
+    this.artist,
+  });
+
+  Result.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    description = json['description'];
+    url = json['url'];
+    creationDate = json['creation_date'];
+    artistId = json['artist_id'];
+    interactionsNumber = json['interactions_number'];
+    commentsNumber = json['comments_number'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    formattedCreationDate = json['formatted_creation_date'];
+    artist = json['artist'] != null ? Artist.fromJson(json['artist']) : null;
+  }
+}
+
+class Artist {
+  int? id;
+  String ?name;
+  dynamic? userName;
+  String? email;
+  dynamic emailVerifiedAt;
+  dynamic image;
+  dynamic expertise;
+  dynamic specialization;
+  dynamic biography;
+  dynamic gender;
+  int? followersNumber;
+  int? ratesNumber;
+  String? createdAt;
+  String? updatedAt;
+
+  Artist({
+    this.id,
+    this.name,
+    this.userName,
+    this.email,
+    this.emailVerifiedAt,
+    this.image,
+    this.expertise,
+    this.specialization,
+    this.biography,
+    this.gender,
+    this.followersNumber,
+    this.ratesNumber,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  Artist.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    userName = json['user_name'];
+    email = json['email'];
+    emailVerifiedAt = json['email_verified_at'];
+    image = json['image'];
+    expertise = json['expertise'];
+    specialization = json['specialization'];
+    biography = json['biography'];
+    gender = json['gender'];
+    followersNumber = json['followers_number'];
+    ratesNumber = json['rates_number'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+}
+

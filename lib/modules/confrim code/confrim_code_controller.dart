@@ -2,6 +2,7 @@
 
 //}
 import 'package:untitled5/Services/Network/urls_api.dart';
+import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'package:untitled5/modules/register/registerr_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,11 +20,21 @@ class ComfirmController extends g.GetxController {
   String? message;
   Rx<ComfirmState> comfirmState=ComfirmState.init.obs;
   Future comfirm({required String otp,required String email}) async {
+        String verifyApi="";
+    if (AppSharedPreferences.getRole == 0) {
+      verifyApi = UrlsApi.verifyArtistApi;
+    }  if (AppSharedPreferences.getRole == 1) {
+     verifyApi = UrlsApi.verifyUserApi;
+    }
     try{
       comfirmState(ComfirmState.loading);
-      Response response=await dioApiService.postData( UrlsApi.verifyApi,
+      Response response=await dioApiService.postData( verifyApi,
           data: {'email': email,
-            'code':otp });
+            'code':otp },
+             options: Options(headers: {
+            "Authorization": "Bearer ${AppSharedPreferences.getToken}"
+          })
+            );
       if(response.data!=null&&response.statusCode==200){
         comfirmState(ComfirmState.succsesful);
       }

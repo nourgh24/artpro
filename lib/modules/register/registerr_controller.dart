@@ -1,6 +1,9 @@
 
+import 'package:get/get_core/src/get_main.dart';
 import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
+import 'package:untitled5/modules/certificate%20of%20reliability/certificate.dart';
+import 'package:untitled5/modules/confrim%20code/confrim_code.dart';
 import 'package:untitled5/modules/navpar/navpar.dart';
 import 'package:untitled5/modules/register/registerr_service.dart';
 import 'package:dio/dio.dart';
@@ -18,10 +21,11 @@ class RegisterrController extends g.GetxController {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  RegisterrService service =RegisterrService();
   DioApiService dioApiService=DioApiService();
   String? message;
+  int activeIndex=0;
   Rx<RegisterState> registerState=RegisterState.init.obs;
+  
   Future register({required String apiUrl,required int role}) async {
     try{
       registerState(RegisterState.loading);
@@ -31,13 +35,38 @@ class RegisterrController extends g.GetxController {
             'c_password':confirmPasswordController.text});
       if(response.data!=null&&response.statusCode==200){
 if(response.data!['success']){
-   AppSharedPreferences.saveToken(response.data["result"][0]['token']) ;
-   
+    if (activeIndex == 1) {
+     AppSharedPreferences.saveToken(response.data["result"][0]['token']) ;
+     AppSharedPreferences.saveRole(role) ;
+      AppSharedPreferences.saveId(response.data["result"][0]['id']) ;
+      
+      Get.to(ConfrimCode(
+        role: 1,
+         apiUrl: UrlsApi.verifyUserApi,
+         email:"${emailController.text}" ,
+          ));
+     /* Get.to(Navpar(
+        role: 1,
+         apiUrl: UrlsApi.homeApi,
+          ));*/
+         registerState(RegisterState.succsesful);
+  }
+   if (activeIndex == 0) {
+     AppSharedPreferences.saveToken(response.data["result"][0]['token']) ;
      AppSharedPreferences.saveRole(role) ;
        AppSharedPreferences.saveId(response.data["result"][0]['id']) ;
-          g.  Get.to(Navpar());
-        registerState(RegisterState.succsesful);
+        Get.to(ConfrimCode(
+        role: 0,
+         apiUrl: UrlsApi.verifyArtistApi,
+         email:"${emailController.text}" ,
+          ));
+      /* Get.to(ArtistView(
+            role: 0,
+             apiUrl: UrlsApi.CertificateApi,
+                ));*/
+         registerState(RegisterState.succsesful);
 
+                          }
 
 }else{
    message=response.data!['date'];
@@ -57,8 +86,6 @@ if(response.data!['success']){
         registerState(RegisterState.error);
       }
     }
-    service.registerr(fullnameController, emailController, passwordController, confirmPasswordController);
-    // يمكنك هنا إضافة المنطق الخاص بتسجيل الدخول
     print('Full Name: ${fullnameController.text}');
     print('Email: ${emailController.text}');
     print('Password: ${passwordController.text}');

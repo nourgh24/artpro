@@ -23,3 +23,28 @@ class ArticlesDetailsService{
   reportComment(var add_Comment_Controller ) async{
     }
 }
+
+
+class AddComplaint{
+  final String Description;
+
+  AddComplaint({
+    required this.Description,
+  });
+}
+
+
+class AddArticleLike{
+  final String Like;
+  AddArticleLike({
+    required this.Like,
+  });
+}
+
+class AddArticleDisLike{
+  final String DisLike;
+  AddArticleDisLike({
+    required this.DisLike,
+  });
+}
+

@@ -10,17 +10,17 @@ import '../../Services/Helper/error_api_handler.dart';
 import '../../Services/Network/dio_api_service.dart';
 
 class HomePageController extends g.GetxController {
-  DioApiService dioApiService = DioApiService();
 
+  DioApiService dioApiService = DioApiService();
   Rx<PaintingState> paintingState = PaintingState.init.obs;
   Rx<SinglePaintingState> singlePaintingState = SinglePaintingState.init.obs;
   HomePageModel? homePageModel;
   String? message;
-  var artworks = <Artwork>[].obs;
 
+
+  var artworks = <Artwork>[].obs;
   loadArtworks() {
     artworks.assignAll([
-      //// يتم استدعاء ips
       Artwork(name: 'Painting 1', imageUrl: 'images/4.jpg'),
       Artwork(name: 'Painting 2', imageUrl: 'images/7.jpg'),
       Artwork(name: 'Painting 3', imageUrl: 'images/8.jpg'),
@@ -33,7 +33,6 @@ class HomePageController extends g.GetxController {
       Artwork(name: 'Painting 2', imageUrl: 'images/7.jpg'),
       Artwork(name: 'Painting 3', imageUrl: 'images/8.jpg'),
       Artwork(name: 'Painting 4', imageUrl: 'images/9.jpg'),
-      // يمكنك إضافة المزيد من اللوحات هنا
     ]);
   }
 
@@ -92,6 +91,7 @@ class HomePageController extends g.GetxController {
     }
   }
 }
+
 
 enum PaintingState {
   init,

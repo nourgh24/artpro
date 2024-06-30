@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:sizer/sizer.dart';
+import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/modules/Account/Widgets/menu_item.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
+import 'package:untitled5/modules/Painting%20list/painting_list.dart';
+import 'package:untitled5/modules/articles%20list/add_article_model.dart';
+import 'package:untitled5/modules/articles%20list/articles_list.dart';
+import 'package:untitled5/modules/articles/articles.dart';
+import 'package:untitled5/modules/articles/articles_controller.dart';
+import 'package:untitled5/modules/articles/articles_model.dart';
+import 'package:untitled5/modules/certificate%20of%20reliability/certificate.dart';
 import 'package:untitled5/modules/welcome/welcome.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -22,9 +30,10 @@ class _AccountScreenState extends State<AccountScreen> {
 
     super.initState();
   }
-
+int id=AppSharedPreferences.getId ;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
           child:  SingleChildScrollView(
@@ -34,9 +43,28 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
           
             MenuItemm(
-              title: "Basic Info",
-              tap: () {
+              title: "ArticlesList Info",
+              tap: ()  {
+            Get.to(ArticlesList(artistId:id ,key: ValueKey("${UrlsApi.ArtistArticleApi}$id "),));
+              },
+              // image: AppAssets.profileIcon,
+            ),
+
             
+            MenuItemm(
+              title: "PaintingList Info",
+              tap: ()  {
+            Get.to(PaintingList(artistId:id ),);
+              },
+              // image: AppAssets.profileIcon,
+            ),
+
+            
+            MenuItemm(
+              title: "Add Certificate",
+              tap: ()  {
+            Get.to(ArtistView( role: 0,
+                apiUrl: UrlsApi.CertificateApi, ));
               },
               // image: AppAssets.profileIcon,
             ),

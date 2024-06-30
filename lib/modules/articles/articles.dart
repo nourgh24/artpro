@@ -1,7 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:untitled5/Services/Network/urls_api.dart';
+import 'package:untitled5/modules/articles/articles_controller.dart';
+import 'package:untitled5/modules/articles/articles_controller.dart';
+import 'package:untitled5/modules/articles_details/articles_details.dart';
+import 'package:untitled5/modules/articles_details/articles_details_service.dart';
 import 'articles_controller.dart';
 import 'articles_service.dart';
 
@@ -22,6 +29,7 @@ class _ArticlesState extends State<Articles> {
     void initState(){
     super.initState();
     _restorepersistedPreference();
+    _controller.getAllArticles();
   }
   void _restorepersistedPreference()async{
     var preferences=await SharedPreferences.getInstance();
@@ -50,248 +58,221 @@ class _ArticlesState extends State<Articles> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          SizedBox(height: screenheight*0.01,),
-        IconButton(onPressed:(){
-          Get.toNamed('/Welcome');
-        },
-          icon: Icon(Icons.arrow_back),
-          ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-        SizedBox(width: screenwidth*0.01,),
-        Text("Articles of art",
-          style: TextStyle(fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.normal,
-            fontSize: 20,
-            color: Colors.blueGrey,
-          ),
-          ),
-          SizedBox(width: screenwidth*0.6,),
-        IconButton(onPressed:(){
-          Get.toNamed('/Navpar');
+            Container(
+            height: screenheight  *0.17,
+            width: screenwidth,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(50),
+              ),
+              color: Colors.orange[100],
+            ),
+            child: Stack(children: [
+              Positioned(
+                top: 30,
+                left: 0,
+                child: Container(
+                  height: screenheight *0.07,
+                  width: screenwidth *0.7,
+                   decoration: BoxDecoration(
+                  color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(50),
+                bottomRight: Radius.circular(50),
+              ),
+            ),                  
+                ),
+              ),
 
-        },
-          icon: Icon(Icons.arrow_forward,
-            color: Colors.blue,
+              Positioned(
+                top: 40,
+                left: 20,
+                child:  Text("Article of art",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.normal,
+                fontSize: 20,
+                color: Colors.orange[200],
+                ),
+                ),
+              ),
+            ],),
+            ),
+          SizedBox(
+            height: screenheight*0.01,
           ),
-        ),
-
-        ],
-          ),
-        SizedBox(height: screenwidth*0.005,),
-        Column(
-          children: [
-            Center(
-              child: Container(
-                height: screenheight*0.67,
-                width: screenwidth*0.9,
-                child: Obx(
-                      () => ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: _controller.articles.length,
-                    itemBuilder: (context, index) {
-                      final Article article = _controller.articles[index];
-                      return GestureDetector(
-                        onTap: () {
-                          // يتم عرض تفاصيل الـ Card عند النقر عليه
-                        },
-                        child: Container(
-                          width: screenwidth*0.9,
-                          height: screenheight*0.25,
-                          child: Card(
-                            elevation: 10,
-                            margin: EdgeInsets.all(10),
-                            child: Stack(
-                              children: [
-                                // صورة المقال
-                                Image.asset(
-                                  article.imageUrl,
-                                  width: screenwidth*0.9, // عرض الصورة
-                                  height:screenheight*0.25, // ارتفاع الصورة
+        Expanded(
+          child: Obx((){
+            if (_controller.articleState.value ==
+                      ArticlesState.loading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (_controller.articleState.value == ArticlesState.error) {
+                    return MaterialButton(
+                      onPressed: () {
+                        _controller.getAllArticles();
+                      },
+                      child: Center(child: Container(
+                        color: Colors.orange[100],
+                        child: Text("Try agein to view the articles"))),
+                    );
+                  }
+                      return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: _controller.articlesModel!.articles!.length,
+                      itemBuilder: (context, index) {
+                        final Article article = _controller.articles[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(() => ArticlesDetails(
+                        complaint:AddComplaint(Description: ""),
+                       articleId: _controller.articlesModel!.articles![index].id!,
+                             ));
+                          },
+                          child: Container(
+                            width: screenwidth*0.95,
+                            height: screenheight*0.35,
+                            child: Card(
+                                elevation: 20,
+                                margin: EdgeInsets.all(12),
+                                child: Stack(
+                                  children: [
+                                    // صورة المقال
+                                   CachedNetworkImage(
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey.withOpacity(0.5),
+                                    highlightColor: Colors.grey,
+                                    child: Container(
+                                      height:screenheight*0.22,
+                                      width: screenwidth,
+                                    ),
+                                  ),
+                                  imageBuilder: (context, imageProvider) => Image(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    height: screenheight *0.22,
+                                    width: screenwidth,
+                            
+                                  ),
+                                  fadeInDuration: const Duration(milliseconds: 4),
+                                  fadeOutDuration:const Duration(milliseconds: 4),
+                                  imageUrl:UrlsApi.baseimageUrl+ _controller
+                                      .articlesModel!.articles![index].url!,
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    _controller.imageUrl,
+                                    fit: BoxFit.cover,
+                                    height: screenheight * 0.22,
+                                    width: screenwidth,
+                                  ),
                                   fit: BoxFit.cover,
                                 ),
-
-                                // زر لفتح تفاصيل الـ Card
-                                Positioned.fill(
-                                  child: Material(
-                                    color: Colors.black12,
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.toNamed('/ArticlesDetails');
-                                        // يتم عرض تفاصيل الـ Card عند النقر عليه
-                                      },
-                                      borderRadius: BorderRadius.circular(50),
+                                   
+                                    Positioned(
+                                      top: 10,
+                                      left: 10,
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                        backgroundImage: NetworkImage(
+                                          _controller
+                                      .articlesModel!.articles![index].artist!.image??
+                              ""),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                // صورة البروفايل
-                                Positioned(
-                                  top: 10,
-                                  left: 10,
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundImage: AssetImage(article.authorImageUrl),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 10,
-                                    right: 10,
-                                    child:IconButton(
-                                      onPressed:(){
-                                        _persistPreference(index);
-                                      },
-                                      icon:Icon(
-                                        _controller.articles[index].favorited?Icons.favorite:Icons.favorite_border,
-                                      //  Favorited?Icons.favorite:Icons.favorite_border,
-                                        color:  _controller.articles[index].favorited?Colors.red:Colors.white,
-                                        size: 25,
+                                    Positioned(
+                                      top: 10,
+                                        right: 10,
+                                        child:IconButton(
+                                          onPressed:(){
+                                            _persistPreference(index);
+                                          },
+                                          icon:Icon(
+                                            _controller.articles[index].favorited?Icons.favorite:Icons.favorite_border,
+                                          //  Favorited?Icons.favorite:Icons.favorite_border,
+                                            color:  _controller.articles[index].favorited?Colors.red:Colors.white,
+                                            size: 25,
+                                          ),
+                                        ),
+                                      
+                                    ),
+                                    // اسم الكاتب
+                                    Positioned(
+                                      top: 5,
+                                      left: 50,
+                                      child: TextButton(onPressed: (){},
+                                      child: Text(
+                                          _controller.articlesModel!.articles![index].artist!.name!,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                      
+                                      ),
+                                    ),
+                                    ),
+                                      
+                                    Positioned(
+                                      top: 20,
+                                      left: 50,
+                                      child: TextButton(onPressed: (){},child: Text(
+                                        _controller.articlesModel!.articles![index].formattedCreationDate!,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 8,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      
+                                      ),
+                                      ),
+                                    ),
+                                    // عنوان المقال
+                                    Positioned(
+                                      bottom: 90,
+                                      left: 10,
+                                      child: Text(
+                                        _controller.articlesModel!.articles![index].title!,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
 
-                                ),
-                                // اسم الكاتب
-                                Positioned(
-                                  top: 15,
-                                  left: 50,
-                                  child: TextButton(onPressed: (){},child: Text(
-                                      article.authorName,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 10,
+                                      child: Center(
+                                        child: Text(
+                                          _controller.articlesModel!.articles![index].description!,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Lateef',
+                                          ),
+                                        ),
                                       ),
-
-                                  ),
-                                ),
-                                ),
-
-                                Positioned(
-                                  top: 30,
-                                  left: 50,
-                                  child: TextButton(onPressed: (){},child: Text(
-                                    article.time,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.normal,
                                     ),
 
-                                  ),
-                                  ),
+
+
+                                    
+                                  ],
                                 ),
-                                // عنوان المقال
-                                Positioned(
-                                  bottom: 10,
-                                  left: 10,
-                                  child: Text(
-                                    article.title,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-            SizedBox(height: 40,),
-       /*     Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-
-                SizedBox(width: 10,),
-                Text("Latest Articles",
-                  style: TextStyle(fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 20,
-                    color: Colors.blueGrey,
-                  ),
-                ),
-                SizedBox(width: 300,),
-                IconButton(onPressed:(){
-                },
-                  icon: Icon(Icons.arrow_forward,
-                    color: Colors.blue,
-                  ),
-                ),
-
-              ],
-            ),
-
-            Container(
-              height: 180,
-              child: Obx(
-                    () => ListView.builder(
-                  scrollDirection: Axis.horizontal, // التمرير الأفقي
-                  itemCount: _controller.latestarticles.length,
-                  itemBuilder: (context, index) {
-                    final LatestArticle latestArticle = _controller.latestarticles[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // يتم عرض تفاصيل الـ Card عند النقر عليه
+                        
+                          );
                       },
-                      child: Container(
-                        width: 200,
-                        child: Card(
-                          elevation: 10,
-                          margin: EdgeInsets.all(10),
-                          child: Stack(
-                            children: [
-                              // صورة المقال
-                              Image.asset(
-                                latestArticle.image,
-                                width: 250, // عرض الصورة
-                                height:100, // ارتفاع الصورة
-                                fit: BoxFit.cover,
-                              ),
 
-                              // زر لفتح تفاصيل الـ Card
-                              Positioned.fill(
-                                child: Material(
-                                  color: Colors.black12,
-                                  child: InkWell(
-                                    onTap: () {
-                                      // يتم عرض تفاصيل الـ Card عند النقر عليه
-                                    },
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                              ),
-                              // اسم الكاتب
-                              Positioned(
-                                bottom: 15,
-                                left: 58,
-                                child: TextButton(onPressed: (){},child: Text(
-                                  latestArticle.Name,
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-
-                                ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            */
+                      );
+                      },
+        ),
+        
+        ),
         ],
           ),
       ),

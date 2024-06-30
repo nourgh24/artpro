@@ -15,15 +15,4 @@ class WelcomeController extends GetxController {
   @override
   void onClose(){
   }
-
-  // void getImage(ImageSource imageSource) async{
-  //   final pickedFile= await ImagePicker().pickImage(source: imageSource);
-  //   if(pickedFile!=null)
-  //     {
-  //       selectedImagePath.value=pickedFile.path;
-  //     }
-  //   else{
-  //     print("No image selected");
-  //   }
-  // }
 }

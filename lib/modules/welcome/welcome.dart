@@ -1,3 +1,4 @@
+import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'package:untitled5/modules/navpar/navpar.dart';
 import 'package:flutter/material.dart';
@@ -36,36 +37,6 @@ class Welcome extends GetView<WelcomeController> {
                     ),
                   ),
                 ),
-
-                /*  Panorama(
-                      interactive: true,
-                     minLatitude: -90,
-                      sensitivity: 1.0,
-                      animReverse: true,
-                      zoom: 0,
-                      animSpeed: 1.0,
-                      child: controller.selectedImagePath.value != ''
-                          ? Image.file(
-                        File(controller.selectedImagePath.value),
-                        fit: BoxFit.cover, // تحديد كيفية تناسب الصورة داخل المساحة المخصصة لها
-                      )
-                          : Image.asset(
-                        'images/4.jpg',
-                        fit: BoxFit.cover, // تحديد كيفية تناسب الصورة داخل المساحة المخصصة لها
-                      ),
-                    ),*/
-                /*Panorama(
-
-                      interactive: true,
-                     minLatitude: -90,
-                      sensitivity: 1.0,
-                      animReverse: true,
-                      zoom: 1,
-                      animSpeed: 1.0,
-                      child: controller.selectedImagePath.value!=''
-                      ?Image.file(File(controller.selectedImagePath.value))
-                      :Image.asset('images/5.jpg'),
-                    ),*/
 
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -119,10 +90,18 @@ class Welcome extends GetView<WelcomeController> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        //Get.offNamed(PageHome());
-                    
                         if (AppSharedPreferences.hasToken) {
-                          Get.to(Navpar());
+                          if(AppSharedPreferences.getRole==0){
+                          Get.to(Navpar(
+                           role: 0,
+                           apiUrl: UrlsApi.homeApi,
+                          ));
+                          }if(AppSharedPreferences.getRole==1) {
+                          Get.to(Navpar(
+                           role: 1,
+                           apiUrl: UrlsApi.homeApi,
+                          ));
+                          }
                         } else {
                           Get.toNamed('/ChooseRole');
                         }
@@ -131,10 +110,11 @@ class Welcome extends GetView<WelcomeController> {
                         'Get Started',
                         style: TextStyle(
                           fontSize: 20,
+                          color: Colors.blueGrey,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.indigo[400],
+                        backgroundColor: Color.fromARGB(255, 221, 159, 66),
                         padding: EdgeInsets.fromLTRB(60, 20, 60, 20),
                         elevation: 5,
                       ),
@@ -146,13 +126,7 @@ class Welcome extends GetView<WelcomeController> {
           ),
         ),
       ),
-      /*floatingActionButton: FloatingActionButton(
-        mini: true,
-        onPressed: (){
-         // controller.getImage(ImageSource.gallery);
-        },
-        child: Icon(Icons.panorama),
-      ),*/
+      
     );
   }
 }

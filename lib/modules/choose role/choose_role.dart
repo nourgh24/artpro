@@ -1,3 +1,4 @@
+import 'package:sizer/sizer.dart';
 import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/modules/register/registerr.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,9 @@ class ChooseRole extends StatefulWidget {
 }
 
 class _ChooseRoleState extends State<ChooseRole> {
-  final ChooseRoleController _controller = Get.put(ChooseRoleController());
-  final ChooseRoleService _service = ChooseRoleService();
+ 
   List<bool> selected = [false, false];
-  List<String> image = ["images/7.jpg", "images/4.jpg"];
+  List<String> image = ["images/7.jpg", "images/intersted in art.jpg"];
   List<String> title = ["artist", "intersted in art"];
   int activeIndex = 0;
   // bool click_artist=false;
@@ -30,7 +30,7 @@ class _ChooseRoleState extends State<ChooseRole> {
         child: Stack(
           children: [
             SizedBox(
-              height: 50,
+              height:screenheight*0.1,
             ),
             Container(
               width: screenwidth,
@@ -119,48 +119,6 @@ class _ChooseRoleState extends State<ChooseRole> {
                   ),
 
                   SizedBox(
-                    height: 40,
-                  ),
-
-                  // InkWell(
-                  //   onTap: (){
-                  //     setState((){
-                  //       click_intersted =!click_intersted;
-                  //     });
-                  //   },
-                  //   child:  Container(
-                  //     width: screenwidth*0.5,
-                  //     height: screenheight*0.2,
-                  //     padding:EdgeInsets.only(left:20,right:20, top:10),
-                  //     margin:EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-                  //     decoration: BoxDecoration(
-                  //       color: (click_intersted==false )? Colors.white :Colors.greenAccent[100],
-                  //       borderRadius: BorderRadius.circular(20),
-                  //     ),
-                  //     child:Column(
-                  //       children:[
-                  //         ImageIcon(
-                  //           AssetImage("images/4.jpg"
-                  //           ),
-                  //           color: Colors.blueAccent,
-                  //           size: 80,
-                  //         ),
-                  //          Text('intersted in art',
-                  //           style:TextStyle(
-                  //             color: Colors.black54,
-                  //             fontSize: 15,
-                  //             fontWeight: FontWeight.bold,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //
-                  //   ),
-                  // ),
-
-                  //  SizedBox(width: 3,),
-
-                  SizedBox(
                     height: screenheight * 0.1,
                   ),
 
@@ -171,8 +129,6 @@ class _ChooseRoleState extends State<ChooseRole> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          //
-                          //  _controller.filteredData();
                           Get.toNamed('/Welcome');
                         },
                         child: Text(
@@ -183,10 +139,6 @@ class _ChooseRoleState extends State<ChooseRole> {
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orangeAccent,
-
-                          // primary: Colors.orangeAccent,
-                          // onPrimary: Colors.white,
-                          // onSurface: Colors.red,
                           padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
                           foregroundColor: Colors.white,
                         ),
@@ -196,8 +148,6 @@ class _ChooseRoleState extends State<ChooseRole> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          //
-                          //  _controller.filteredData();
                           if (activeIndex == 1) {
                             Get.to(Registerr(
                               role: 1,
@@ -211,8 +161,6 @@ class _ChooseRoleState extends State<ChooseRole> {
                               apiUrl: UrlsApi.registerArtistApi,
                             ));
                           }
-
-                          //Get.offNamed(PageHome());
                         },
                         child: Text(
                           'Next',
@@ -222,10 +170,6 @@ class _ChooseRoleState extends State<ChooseRole> {
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orangeAccent,
-
-                          // primary: Colors.orangeAccent,
-                          // onPrimary: Colors.white,
-                          // onSurface: Colors.red,
                           padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
                           foregroundColor: Colors.white,
                         ),

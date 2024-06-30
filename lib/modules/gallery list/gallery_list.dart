@@ -1,6 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:untitled5/Services/Network/urls_api.dart';
+import 'package:untitled5/modules/gallery/gallery_display_view.dart';
 // import 'package:panorama/panorama.dart';
 
 import 'gallery_list_controller.dart';
@@ -15,159 +20,193 @@ class GalleryList extends StatefulWidget {
 
 class _GalleryListState extends State<GalleryList> {
   final GalleryListController _controller = Get.put(GalleryListController());
+  
+  @override
+    void initState(){
+    super.initState();
+   _controller.getAllGalleryes();
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenwidth=MediaQuery.of(context).size.width;
     double screenheight=MediaQuery.of(context).size.height;
     return Scaffold(
-        body: Container(
-        height: screenheight,
-        width: screenwidth,
-        child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-        SizedBox(height: screenheight*0.01,),
+      backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            Container(
+            height: screenheight  *0.17,
+            width: screenwidth,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(50),
+              ),
+              color: Colors.orange[100],
+            ),
+            child: Stack(children: [
+              Positioned(
+                top: 30,
+                left: 0,
+                child: Container(
+                  height: screenheight *0.07,
+                  width: screenwidth *0.7,
+                   decoration: BoxDecoration(
+                  color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(50),
+                bottomRight: Radius.circular(50),
+              ),
+            ),                  
+                ),
+              ),
 
-    Row(
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-    SizedBox(width: screenwidth*0.05,),
-    Text("Galleries of art",
-    style: TextStyle(fontWeight: FontWeight.bold,
-    fontStyle: FontStyle.normal,
-    fontSize: 20,
-    color: Colors.blueGrey,
-    ),
-    ),
+              Positioned(
+                top: 40,
+                left: 20,
+                child:  Text("Galleries of art",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.normal,
+                fontSize: 20,
+                color: Colors.orange[200],
+                ),
+                ),
+              ),
+            ],),
+            ),
 
-    ],
-    ),
-    SizedBox(height: screenwidth*0.08,),
-    Column(
-    children: [
-    Center(
-    child: Container(
-    height: screenheight*0.67,
-    width: screenwidth*0.95,
-    child: Obx(
-    () => ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: _controller.galleries.length,
-    itemBuilder: (context, index) {
-    final gallery_list gallery = _controller.galleries[index];
-    return GestureDetector(
-    onTap: () {
-        },
-    child: Container(
-    width: screenwidth*0.58,
-    height: screenheight*0.66,
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-    shadowColor: Colors.orange[700],
-    elevation: 10,
-    margin: EdgeInsets.all(10),
-    child: Stack(
-    children: [
-    // صورة المقال
-   Image.asset(
-      //color: ColorFilters.greyscale,
-      gallery.imageUrl,
-    width: screenwidth*0.58, // عرض الصورة
-    height:screenheight*0.66, // ارتفاع الصورة
-    fit: BoxFit.cover,
-    ),
-     // Panorama(
-     //
-     //  interactive: true,
-     //  minLatitude: -90,
-     //  sensitivity: 1.0,
-     //  animReverse: true,
-     //  zoom: 1,
-     //  animSpeed: 1.0,
-     //  child:Image.asset('images/5.jpg'),
-     //  ),
+               SizedBox(height: screenheight*0.02,),
+               Expanded(
+                child:MediaQuery.removePadding(
+                  removeTop: true,
+                  context: context,
+                   child: Obx((){
+                   if (_controller.galleryliststate.value ==GalleryListState.loading) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (_controller.galleryliststate.value == GalleryListState.error) {
+                        return MaterialButton(
+                          onPressed: () {
+                            _controller.getAllGalleryes();
+                          },
+                          child: Center(child: Container(
+                            color: Colors.orange[100],
+                            child: Text("Try agein to view the galleries"))),
+                        );
+                      }
+                  return  ListView.builder(
+                     scrollDirection: Axis.vertical,
+               itemCount: _controller.gallerylistmodel!.Gallerys!.length,
+               itemBuilder: (context, index) {
+               final gallery_list gallery = _controller.galleries[index];
+               return GestureDetector(
+               onTap: () {
+                Get.toNamed('/GalleryDisplayView');
+                  Get.to(() => GalleryDisplayView(
+                             ));
+              },
+              child: Container(
+                child: Column(
+                    children: [
+                      Container(
+                         decoration: BoxDecoration(
+                          color:Color.fromARGB(255, 185, 197, 205),
+                         borderRadius: BorderRadius.only(
+                         bottomLeft: Radius.circular(100),
+                                ),
+                                boxShadow: [
+                              new BoxShadow(
+                             color: Color.fromARGB(255, 219, 194, 163),
+                             offset: new Offset(-10.0, 0.0),
+                              blurRadius: 20,
+                              spreadRadius: 1.0,
+                                ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.only(
+                                left: 30,
+                                top: 30,
+                                bottom: 60,
+                              ),
+                  
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                   Row(
+                     children: [
+                    CircleAvatar(
+                          radius: 20,
+                          backgroundImage: _controller.gallerylistmodel!.Gallerys![index].artist?.image != null
+                         ? NetworkImage(UrlsApi.baseimageUrl + _controller.gallerylistmodel!.Gallerys![index].artist!.image)
+                          : AssetImage('assets/images/default_image.png') as ImageProvider,
+                          ),
 
-    Positioned.fill(
-    child: Material(
-    color: Colors.black12,
-    child: InkWell(
-    onTap: () {
-    Get.toNamed('/GalleryDisplayView');
-    },
-    borderRadius: BorderRadius.circular(50),
-    ),
-    ),
-    ),
-    // صورة البروفايل
-    Positioned(
-    bottom: 10,
-    left: 10,
-    child: CircleAvatar(
-    radius: 20,
-    backgroundImage: AssetImage(gallery.authorImageUrl),
-    ),
-    ),
-    // اسم الكاتب
-    Positioned(
-    bottom: 15,
-    left: 50,
-    child: TextButton(onPressed: (){},child: Text(
-      gallery.authorName,
-    style: TextStyle(
-    color: Colors.white,
-    fontSize: 15,
-    fontWeight: FontWeight.normal,
-    ),
-    ),
-    ),
-    ),
 
-    Positioned(
-    bottom: 30,
-    left: 50,
-    child: TextButton(onPressed: (){},child: Text(
-      gallery.time,
-    style: TextStyle(
-    color: Colors.white,
-    fontSize: 8,
-    fontWeight: FontWeight.normal,
-    ),
+                         TextButton(onPressed: (){},child: Text(
+                            _controller.gallerylistmodel!.Gallerys![index].artist!.name!,
+                            style: TextStyle(
+                           color: Colors.black54,
+                           fontSize: 15,
+                           fontWeight: FontWeight.bold,
+                                 ),
+                                 ),
+                                 ),
+                                 
+                                Text(
+                                   _controller.gallerylistmodel!.Gallerys![index].creationDate!,
+                                 style: TextStyle(
+                                 color: Colors.black54,
+                                 fontSize: 8,
+                                 fontWeight: FontWeight.bold,
+                                 ),  
+                                 ),
+                   
+                     ],
+                   ),
+                  
+                     SizedBox(height: screenheight*0.03,),
+                    Text(
+                       _controller.gallerylistmodel!.Gallerys![index].name!,  
+                              style: TextStyle(
+                                 color: Colors.blueGrey,
+                                 fontWeight: FontWeight.bold,
+                                 fontSize: 22,
+                                 ),
+                                 ),
+                  
+                  SizedBox(height: screenheight*0.01,),
+                  Center(
+                    child: Text(
+                       _controller.gallerylistmodel!.Gallerys![index].details!,
+                                 style: TextStyle(
+                                   color: Colors.white,
+                                   fontWeight: FontWeight.bold,
+                                   ),
+                                   ),
+                  ),
+                                ],
+                              ),
+                      ),
+                      SizedBox(height: screenheight*0.015),
+                  ],
+                  
+                  ),
+                  ),
+                  );
+                },
+                );
+                },
+),      
 
-    ),
-    ),
-    ),
-    // عنوان المقال
-    Positioned(
-    top: 10,
-    left: 10,
-    child: Text(
-      gallery.title,
-    style: TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-    ],
-    ),
-    ),
-    ),
-    );
-    },
-    ),
-    ),
-    ),
-    ),
-    ],
-    ),
-          ],
-        ),
-        ),
 
-    );
-  }
+                   
+                   ),
+               
+),
+],
+),
+);
 }
+}
+

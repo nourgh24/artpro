@@ -1,113 +1,104 @@
 
-/*import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+///////////////////زابط نوعا ما بدون تنفيذ
+import 'package:get/get.dart' as g;
+import 'package:dio/dio.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:untitled5/Services/Helper/error_api_handler.dart';
+import 'package:untitled5/Services/Network/dio_api_service.dart';
+import 'package:untitled5/Services/Network/urls_api.dart';
+import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
+import 'package:untitled5/modules/filter/filter_model.dart';
 
-class FilterController extends GetxController {
-  final TextEditingController searchController = TextEditingController();
-  var filteredData = <Map<String, dynamic>>[].obs;
-  var allData = <Map<String, dynamic>>[
-    // يجب ملء allData بالبيانات الفعلية الخاصة بك
-    // مثال:
-    {'name': 'Art Piece 1', 'type': 'Art', 'price': 100, 'date': '2022-01-01', 'evaluation': 4.5},
-    {'name': 'Sculpture Piece', 'type': 'Sculpture', 'price': 200, 'date': '2022-02-01', 'evaluation': 3.8},
-    {'name': 'Photography Piece', 'type': 'Photography', 'price': 150, 'date': '2022-03-01', 'evaluation': 4.0},
-    // أضف المزيد من العناصر هنا
-  ].obs;
+class FilterController extends g.GetxController {
+  var searchQuery = ''.obs;
+  var searchResults = <dynamic>[].obs;
+  var isLoading = false.obs;
+  DioApiService dioApiService = DioApiService();
+  Rx<FilterState> filterState = FilterState.init.obs;
+  var message = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    filteredData.assignAll(allData);
-  }
+  Future<void> search({required String query, required String searchType}) async {
+    String apiUrl;
+    Map<String, dynamic> queryParams = {};
 
-  void filterData(String query) {
-    if (query.isEmpty) {
-      filteredData.assignAll(allData);
-    } else {
-      filteredData.assignAll(
-        allData.where(
-              (item) => item['name']?.toString().toLowerCase().contains(query.toLowerCase()) ?? false,
+    switch (searchType) {
+      case 'Artist_Name':
+        apiUrl = "${UrlsApi.SearchApi}searchForArtist?";
+        queryParams = {'contains[name]': query};
+        break;
+      case 'Title':
+       apiUrl = "${UrlsApi.SearchApi}searchForPainting?";
+        queryParams = {'contains[title]': query};
+        break;
+      case 'Description':
+        apiUrl = "${UrlsApi.SearchApi}searchForPainting?";
+        queryParams = {'contains[description]': query};
+       //queryParams = {'contains[description]': query.replaceFirst("description:", "")};
+        break;
+      case 'Evaluation':
+      case 'Price':
+      case 'Date':
+        apiUrl = "${UrlsApi.SearchApi}searchForType";
+        queryParams = {'exact[id]': query};
+        break;
+      default:
+        message.value = "Invalid search type";
+        filterState(FilterState.error);
+        return;
+    }
+
+    try {
+      filterState(FilterState.loading);
+      Response response = await dioApiService.postData(
+        apiUrl,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer ${AppSharedPreferences.getToken}"
+          },
         ),
+        queryParameters: queryParams,
       );
-    }
-  }
 
-  void applyFilters(String searchField, String orderBy, Map<String, bool> typeFilters) {
-    List<Map<String, dynamic>> filtered = allData;
-
-    // Filter by type
-    filtered = filtered.where((item) {
-      if (typeFilters[item['type']] == true) {
-        return true;
+      if (response.data != null && response.statusCode == 200) {
+        if (response.data['success']) {
+          var results = response.data['result'];
+          searchResults.value = results.map((item) {
+            if (item['title'] != null ) {
+              return PaintingSearchModel.fromJson(item);
+            }
+              else if ( item['description'] != null) {
+              return PaintingSearchModel.fromJson(item);
+            }
+             
+           else if (item['name'] != null) {
+              return ArtistSearchModel.fromJson(item);
+            }
+             else if (item['type_name'] != null) {
+              return TypeSearchModel.fromJson(item);
+            }
+            return null;
+          }).where((item) => item != null).toList();
+          filterState(FilterState.successful);
+        } else {
+          message.value = response.data['data'];
+          filterState(FilterState.error);
+        }
       }
-      return false;
-    }).toList();
-
-    // Search by specific field
-    if (searchField != 'Null' && searchController.text.isNotEmpty) {
-      filtered = filtered.where((item) {
-        return item[searchField]?.toString().toLowerCase().contains(searchController.text.toLowerCase()) ?? false;
-      }).toList();
+    } catch (error) {
+      if (error is DioError) {
+        message.value = ErrorApiHandler.getErrorMessage(error);
+        filterState(FilterState.error);
+      } else {
+        message.value = error.toString();
+        filterState(FilterState.error);
+      }
     }
-
-    // Order by specified field
-    if (orderBy != 'Null') {
-      filtered.sort((a, b) {
-        var aValue = a[orderBy];
-        var bValue = b[orderBy];
-
-        if (aValue == null || bValue == null) {
-          return 0;
-        }
-
-        if (orderBy == 'Price' || orderBy == 'Evaluation') {
-          return aValue.compareTo(bValue);
-        } else if (orderBy == 'Date') {
-          return DateTime.parse(aValue).compareTo(DateTime.parse(bValue));
-        }
-
-        return aValue.toString().compareTo(bValue.toString());
-      });
-    }
-
-    filteredData.assignAll(filtered);
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
   }
 }
-*/
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-//import 'package:your_api_service.dart';
-
-class FilterController extends GetxController {
-  final TextEditingController searchController = TextEditingController();
-  var filteredData = [].obs;
-  var allData = [].obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-  void filterData(String query) {
-    filteredData.assignAll(
-      allData.where(
-            (item) => item.name.toLowerCase().contains(query.toLowerCase()),
-      ),
-    );
-  }
-  void filterByType(String type) {
-    filteredData.assignAll(
-      allData.where((item) => item.type == type),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+enum FilterState {
+  init,
+  successful,
+  error,
+  loading,
 }

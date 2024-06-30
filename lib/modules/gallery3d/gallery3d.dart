@@ -14,11 +14,9 @@ class Gallery3d extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ديكور الجدار
             Container(
           height: 1000,
-          color: Colors.grey[300], // لون الجدار
-          // يمكنك إضافة أي ديكور آخر للجدار هنا
+          color: Colors.grey[300],
 
           child: Stack(
         children: [

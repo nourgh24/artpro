@@ -87,11 +87,11 @@ class _PaingingAvatarWidgetState extends State<PaingingAvatarWidget> {
     }
     if (selctedImage != null) {
       return Container(
-          height: 20.h,
+          height: 25.h,
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey,
-              borderRadius: BorderRadius.circular(4.w),
+              borderRadius: BorderRadius.circular(2.w),
               // border: Border.all(color: AppColors.primaryColor),
               image: DecorationImage(
                   image: FileImage(File(
@@ -109,7 +109,7 @@ class _PaingingAvatarWidgetState extends State<PaingingAvatarWidget> {
         ),
         child:const  Icon(
         Icons.add_photo_alternate_outlined,
-        size: 40,
+        size: 30,
         ),
       );
     }
@@ -134,7 +134,7 @@ class _PaingingAvatarWidgetState extends State<PaingingAvatarWidget> {
                 onPressed: () {
                   showImageDialog(context);
                 },
-                icon: Icon(Icons.edit)
+                icon: Icon(Icons.edit,size: 20,)
               ),
             ),
           ),
