@@ -51,7 +51,7 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
 
     //Matrix for Elements
     final Matrix4 pvMatrix = Matrix4.identity()
-      ..setEntry(3, 3, 1.4 / 1.1) // Increasing Scale by 90%
+      ..setEntry(3, 3, 1.3 / 1.1) // Increasing Scale by 90%
       ..setEntry(1, 1, fraction) // Changing Scale Along Y Axis
       ..setEntry(3, 0, 0.002 * -diff); // Changing Perspective Along X Axis
 
@@ -111,7 +111,7 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
                                 children: [
                                   SizedBox(width: screenwidth * 0.01),
 
-                                /*  CachedNetworkImage(
+                              /*    CachedNetworkImage(
                                     placeholder: (context, url) => Shimmer.fromColors(
                                     baseColor: Colors.grey.withOpacity(0.5),
                                     highlightColor: Colors.grey,
@@ -148,18 +148,44 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
                              ),
                             fit: BoxFit.cover,
                            ),*/
-                            CircleAvatar(
+                           ////////////////
+                           CircleAvatar(
                                  radius: 25,
                                  backgroundImage: AssetImage('images/7.jpg'),
                                           ),
+                                          
 
-                                  Column(
+                                   Column(
                                     children: [
+
+                                   /*   TextButton(
+  onPressed: () {},
+  child: Text(
+    // التحقق من وجود البيانات قبل الوصول إليها
+    galleryController.gallerydisplaymodel != null &&
+    galleryController.gallerydisplaymodel!.gallerys != null &&
+    galleryController.gallerydisplaymodel!.gallerys!.isNotEmpty &&
+    galleryController.gallerydisplaymodel!.gallerys![0].paintings != null &&
+    galleryController.gallerydisplaymodel!.gallerys![0].paintings!.isNotEmpty &&
+    galleryController.gallerydisplaymodel!.gallerys![0].paintings![0].artist != null
+        ? galleryController.gallerydisplaymodel!.gallerys![0].paintings![0].artist!.name ?? 'Unknown Artist'
+        : 'Unknown Artist',
+        
+
+    style: TextStyle(
+      color: Colors.black,
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.normal,
+    ),
+  ),
+),*/
+
                                       TextButton(
                                         onPressed: () {},
                                         child: Text(
                                           "Reman",
-                                         // galleryController.gallerydisplaymodel!.gallerys![0].paintings![0].artist?.name ?? 'Unknown Artist',
+                                      //    galleryController.gallerydisplaymodel!.gallerys![0].paintings![0].artist?.name ?? 'Unknown Artist',
 
                                           style: TextStyle(
                                             color: Colors.black,
@@ -181,6 +207,7 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
                                       ),
                                     ],
                                   ),
+                              
                                 ],
                               ),
                               SizedBox(height: screenheight * 0.03),
@@ -225,15 +252,8 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      }),
-                    
-                    ),
-                    
-
-                    Container(
+                             
+                       Container(
           child: Center(
             child: AspectRatio(
               aspectRatio: 0.7,
@@ -269,11 +289,97 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
           transform: pvMatrix,
           alignment: FractionalOffset.center,
           child: Container(
-            child:Image.asset(
-             // "img/image_2.jpg",
-             "images/13.jpg",
-              fit: BoxFit.fill,
+            child:
+            
+        GestureDetector(
+          onTap: () {
+      // عرض الصورة بملء الشاشة عند النقر عليها
+      Get.dialog(
+        Dialog(
+          backgroundColor: Colors.transparent, // لضمان أن الخلفية شفافة
+          insetPadding: EdgeInsets.zero, // لإزالة الحواف حول الصورة
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: InteractiveViewer(
+              boundaryMargin: EdgeInsets.all(0), // لضبط الحواف للتكبير والتحريك
+              minScale: 1.0, // أقل نسبة تكبير
+              maxScale: 7.0, // أقصى نسبة تكبير
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey.withOpacity(0.5),
+                  highlightColor: Colors.grey,
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.grey,
+                  ),
+                ),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover, // لجعل الصورة تملأ الشاشة بالكامل
+                    ),
+                  ),
+                ),
+                fadeInDuration: const Duration(milliseconds: 4),
+                fadeOutDuration: const Duration(milliseconds: 4),
+                imageUrl:  "images/13.jpg",// UrlsApi.baseimageUrl + galleryController.gallerydisplaymodel!.gallerys![0].paintings![0].artist?.image!,
+                errorWidget: (context, url, error) => Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage( "images/13.jpg"),
+                      //image: AssetImage('${galleryController.imageUrl}'),
+                      fit: BoxFit.cover, // لضمان عرض الصورة الاحتياطية بشكل كامل
+                    ),
+                  ),
+                ),
+              ),
             ),
+          ),
+        ),
+      );
+    },
+    child: CachedNetworkImage(
+      placeholder: (context, url) => Shimmer.fromColors(
+        baseColor: Colors.grey.withOpacity(0.5),
+        highlightColor: Colors.grey,
+        child: Container(
+          width: double.maxFinite,
+          height: screenheight * 0.5,
+          color: Colors.grey,
+        ),
+      ),
+      imageBuilder: (context, imageProvider) => Container(
+        width: double.maxFinite,
+        height: screenheight * 0.5,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover, // لضمان تغطية الصورة للصندوق
+          ),
+        ),
+      ),
+      fadeInDuration: const Duration(milliseconds: 4),
+      fadeOutDuration: const Duration(milliseconds: 4),
+      imageUrl:  "images/13.jpg",// UrlsApi.baseimageUrl + galleryController.gallerydisplaymodel!.gallerys![0] .paintings![0].artist?.image!,
+      errorWidget: (context, url, error) => Container(
+        width: double.maxFinite,
+        height: screenheight * 0.5,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image:  AssetImage( "images/13.jpg"),//AssetImage('${galleryController.imageUrl}'),
+            fit: BoxFit.cover, // لضمان عرض الصورة الاحتياطية بشكل كامل
+          ),
+        ),
+      ),
+    ),
+  ),
             
             /* CachedNetworkImage(
                                                 placeholder: (context, url) => Shimmer.fromColors(
@@ -323,6 +429,11 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
             ),
           ),
         ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
                   ],
                 ),
               ],

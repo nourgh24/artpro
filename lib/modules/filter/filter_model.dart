@@ -4,10 +4,9 @@ class FilterModel {
   String sortBy; // 'السعر', 'التاريخ', 'التقييم'
   String filterType; // نوع الصور
 
-  FilterModel({required this.searchType, required this.query, this.sortBy = '', this.filterType = ''});
+  FilterModel({required this.searchType, required this.query,
+   this.sortBy = '', this.filterType = ''});
 }
-
-
 class ArtistSearchModel {
   final int id;
   final String name;

@@ -175,7 +175,7 @@ class _ArticlesState extends State<Articles> {
                                       child: CircleAvatar(
                                         radius: 20,
                                         backgroundImage: NetworkImage(
-                                          _controller
+                                          UrlsApi.baseimageUrl+_controller
                                       .articlesModel!.articles![index].artist!.image??
                               ""),
                                       ),

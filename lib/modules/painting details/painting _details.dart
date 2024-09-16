@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/modules/article%20comments/article_comments.dart';
-import 'package:untitled5/modules/checkout_payment/checkout_payment.dart';
 import 'package:untitled5/modules/painting%20details/painting_details_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -129,187 +130,215 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                   return SizedBox();
                 }
       
-                return Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey.withOpacity(0.5),
-                            highlightColor: Colors.grey,
-                            child: Container(
-                              width: double.maxFinite,
-                              height: screenheight * 0.5,
-                              color: Colors.grey,
-                            )),
-                        imageBuilder: (context, imageProvider) => Container(
-                          width: double.maxFinite,
-                          height: screenheight * 0.5,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                          ),
-                        ),
-                        fadeInDuration: const Duration(milliseconds: 4),
-                        fadeOutDuration: const Duration(milliseconds: 4),
-                        imageUrl:UrlsApi.baseimageUrl+ _controller.paintingsModel!.painting!.url! ??"",
-                        errorWidget: (context, url, error) => Container(
-                          width: double.maxFinite,
-                          height: screenheight * 0.5,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('${_controller.imageUrl.value}'),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        fit: BoxFit.cover,
-                      ),
+                return 
+                Stack(
+  children: [
+    PhotoViewGallery.builder(
+      scrollPhysics: const BouncingScrollPhysics(),
+      builder: (BuildContext context, int index) {
+        return PhotoViewGalleryPageOptions(
+          imageProvider: NetworkImage(""),
+          initialScale: PhotoViewComputedScale.contained * 1.8,
+        );
+      },
+      itemCount: 1,
+    ),
+Positioned(
+  left: 0,
+  right: 0,
+  child: GestureDetector(
+    onTap: () {
+      // عرض الصورة بملء الشاشة عند النقر عليها
+      Get.dialog(
+        Dialog(
+          backgroundColor: Colors.transparent, // لضمان أن الخلفية شفافة
+          insetPadding: EdgeInsets.zero, // لإزالة الحواف حول الصورة
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: InteractiveViewer(
+              boundaryMargin: EdgeInsets.all(0), // لضبط الحواف للتكبير والتحريك
+              minScale: 1.0, // أقل نسبة تكبير
+              maxScale: 8.0, // أقصى نسبة تكبير
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey.withOpacity(0.5),
+                  highlightColor: Colors.grey,
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.grey,
+                  ),
+                ),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover, // لجعل الصورة تملأ الشاشة بالكامل
                     ),
-                    Positioned(
-                      left: 20,
-                      top: 30,
-                      child: Row(
+                  ),
+                ),
+                fadeInDuration: const Duration(milliseconds: 4),
+                fadeOutDuration: const Duration(milliseconds: 4),
+                imageUrl: UrlsApi.baseimageUrl + _controller.paintingsModel!.painting!.url! ?? "",
+                errorWidget: (context, url, error) => Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('${_controller.imageUrl.value}'),
+                      fit: BoxFit.cover, // لضمان عرض الصورة الاحتياطية بشكل كامل
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+    child: CachedNetworkImage(
+      placeholder: (context, url) => Shimmer.fromColors(
+        baseColor: Colors.grey.withOpacity(0.5),
+        highlightColor: Colors.grey,
+        child: Container(
+          width: double.maxFinite,
+          height: screenheight * 0.5,
+          color: Colors.grey,
+        ),
+      ),
+      imageBuilder: (context, imageProvider) => Container(
+        width: double.maxFinite,
+        height: screenheight * 0.5,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover, // لضمان تغطية الصورة للصندوق
+          ),
+        ),
+      ),
+      fadeInDuration: const Duration(milliseconds: 4),
+      fadeOutDuration: const Duration(milliseconds: 4),
+      imageUrl: UrlsApi.baseimageUrl + _controller.paintingsModel!.painting!.url! ?? "",
+      errorWidget: (context, url, error) => Container(
+        width: double.maxFinite,
+        height: screenheight * 0.5,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('${_controller.imageUrl.value}'),
+            fit: BoxFit.cover, // لضمان عرض الصورة الاحتياطية بشكل كامل
+          ),
+        ),
+      ),
+    ),
+  ),
+),
+
+    Positioned(
+      left: 20,
+      top: 30,
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(Icons.arrow_back_ios),
+            color: Colors.white,
+          ),
+        ],
+      ),
+    ),
+
+    Positioned(
+      top: 30,
+      right: 20,
+      child: IconButton(
+        onPressed: () {
+          _favoritedPreference();
+        },
+        icon: Icon(
+          Favorited ? Icons.favorite : Icons.favorite_border,
+          color: Favorited ? Colors.red : Colors.white,
+          size: 25,
+        ),
+      ),
+    ),
+
+    // تعديل الموضع ليكون داخل الـ Stack
+    Positioned(
+      top: 330,
+      child: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+          width: screenwidth,
+          height: screenheight * 1.5,
+          decoration: BoxDecoration(
+            color: Colors.white70,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: screenheight * 0.01),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Image Details',
+                    style: TextStyle(
+                      color: Colors.orangeAccent,
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenheight * 0.01),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(
+                          UrlsApi.baseimageUrl+_controller.paintingsModel!.painting!.artist!.image ?? "",
+                        ),
+                      ),
+
+                      Column(
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: Icon(Icons.arrow_back_ios),
-                            color: Colors.white,
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              '${_controller.paintingsModel!.painting!.artist!.name}',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '${_controller.paintingsModel!.painting!.formattedCreationDate}',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 8,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Positioned(
-                      top: 30,
-                      right: 20,
-                      child: IconButton(
-                        onPressed: () {
-                          _favoritedPreference();
-                        },
-                        icon: Icon(
-                          Favorited ? Icons.favorite : Icons.favorite_border,
-                          //  Favorited?Icons.favorite:Icons.favorite_border,
-                          color: Favorited ? Colors.red : Colors.white,
-                          size: 25,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 330,
-                      child: SingleChildScrollView(
-                        child: Container(
-                          padding:
-                              const EdgeInsets.only(left: 20, right: 20, top: 40),
-                          width: screenwidth,
-                          height: screenheight * 1.5,
-                          decoration: BoxDecoration(
-                            color: Colors.white70,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              topRight: Radius.circular(50),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(height: screenheight*0.01,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Image Details',
-                                    style: TextStyle(
-                                      color: Colors.orangeAccent,
-                                      fontSize: 20,
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: screenheight * 0.01,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Positioned(
-                                        top: 460,
-                                        left: 30,
-                                        child: CachedNetworkImage(
-                                          placeholder: (context, url) => Center(
-                                            child: Shimmer.fromColors(
-                                              baseColor:
-                                                  Colors.grey.withOpacity(0.5),
-                                              highlightColor: Colors.grey,
-                                              child: const CircleAvatar(
-                                                radius: 25,
-                                              ),
-                                            ),
-                                          ),
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  CircleAvatar(
-                                            radius: 25,
-                                            backgroundImage: imageProvider,
-                                          ),
-                                          fadeInDuration:
-                                              const Duration(milliseconds: 4),
-                                          fadeOutDuration:
-                                              const Duration(milliseconds: 4),
-                                          imageUrl: _controller.paintingsModel!
-                                                  .painting!.artist!.image ??
-                                              "",
-                                          errorWidget: (context, url, error) =>
-                                              CircleAvatar(
-                                            radius: 25,
-                                            backgroundImage: AssetImage(
-                                                '${_controller.authorImageUrl.value}'),
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Positioned(
-                                            top: 500,
-                                            left: 100,
-                                            child: TextButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                '${_controller.paintingsModel!.painting!.artist!.name}',
-                                                style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                         
-                                           Positioned(
-                                        top: 510,
-                                        left: 60,
-                                        child: Text(
-                                          '${_controller.paintingsModel!.painting!.formattedCreationDate}',
-                                          style: TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 8,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                      ),
-                                        ],
-                                      ),
-                                     
-                         SizedBox(width:screenwidth *0.12),
+                      SizedBox(width: screenwidth * 0.12),
                       TextButton(
                         onPressed: () {
                           Get.dialog(
@@ -328,22 +357,21 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                       border: OutlineInputBorder(),
                                       hintText: 'Enter Reason here...',
                                     ),
-                                   controller: widget.complaintDescriptionController,
+                                    controller: widget.complaintDescriptionController,
                                   ),
                                 ],
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                               final newcomplaint = AddPaintingComplaint(
-                               Description:widget.complaintDescriptionController.text,
-                               ); 
-                                     _controller.addPComplaint(
+                                    final newcomplaint = AddPaintingComplaint(
+                                      Description: widget.complaintDescriptionController.text,
+                                    );
+                                    _controller.addPComplaint(
                                       addpaintingcopmlaint: newcomplaint,
                                       paintingId: widget.paintingId,
-                                      );
-                                       // _controller.submitReport();
-                                        Get.back();
+                                    );
+                                    Get.back();
                                   },
                                   child: Text('Save', style: TextStyle(color: Colors.black45)),
                                 ),
@@ -364,6 +392,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                           ),
                         ),
                       ),
+               
                                       
                                     ],
                                   ),
@@ -373,7 +402,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                   Text(
                                     'Title:',
                                     style: TextStyle(
-                                      color: Colors.grey,
+                                      color: Colors.black87,
                                       fontStyle: FontStyle.italic,
                                       backgroundColor: Colors.black12,
                                       fontWeight: FontWeight.bold,
@@ -395,7 +424,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                   Text(
                                     'Type:',
                                     style: TextStyle(
-                                      color: Colors.grey,
+                                      color: Colors.black87,
                                       fontStyle: FontStyle.italic,
                                       backgroundColor: Colors.black12,
                                       fontWeight: FontWeight.bold,
@@ -420,7 +449,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                     Text(
                                       'Size:',
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                       color: Colors.black87,
                                         fontStyle: FontStyle.italic,
                                         backgroundColor: Colors.black12,
                                         fontWeight: FontWeight.bold,
@@ -446,7 +475,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                     Text(
                                       'Price:',
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.black87,
                                         fontStyle: FontStyle.italic,
                                         backgroundColor: Colors.black12,
                                         fontWeight: FontWeight.bold,
@@ -469,7 +498,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                   Text(
                                     'Description:',
                                     style: TextStyle(
-                                      color: Colors.grey,
+                                     color: Colors.black87,
                                       fontStyle: FontStyle.italic,
                                       backgroundColor: Colors.black12,
                                       fontWeight: FontWeight.bold,
@@ -502,7 +531,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                       Text(
                                         'Rate:',
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: Colors.black87,
                                           fontStyle: FontStyle.italic,
                                           backgroundColor: Colors.black12,
                                           fontWeight: FontWeight.bold,
@@ -545,7 +574,7 @@ class _PaintingDetailsState extends State<PaintingDetails> {
                                       Text(
                                         'Total Rate:',
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: Colors.black87,
                                           fontStyle: FontStyle.italic,
                                           backgroundColor: Colors.black12,
                                           fontWeight: FontWeight.bold,

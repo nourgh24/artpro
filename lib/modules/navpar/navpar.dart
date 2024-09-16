@@ -4,7 +4,7 @@ import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'package:untitled5/modules/Account/account_screen.dart';
 import 'package:untitled5/modules/Painting%20list/add_new_painting.dart';
 import 'package:untitled5/modules/Painting%20list/painting_list.dart';
-import 'package:untitled5/modules/profile/profile_view.dart';
+import 'package:untitled5/modules/profiles/profiles.dart';
 
 import '../article comments/article_comments.dart';
 import '../articles/articles.dart';
@@ -28,8 +28,10 @@ class _NavparState extends State<Navpar> {
     HomePage(),
     Articles(),
     GalleryList(),
+   //Profiles(),
+    Profiles(artistId: AppSharedPreferences.getId,),
     AccountScreen(),
-    ProfileView(),
+
   ];
   int _selectedIndex=0;
 
@@ -39,7 +41,7 @@ class _NavparState extends State<Navpar> {
     const Icon(Icons.edit_note,color: Colors.orangeAccent,),
     const Icon(Icons.photo_library_outlined,color: Colors.orangeAccent,),
     const Icon(Icons.person,color: Colors.orangeAccent,),
-    const Icon(Icons.person_2_outlined,color: Colors.orangeAccent,),
+    const Icon(Icons.favorite,color: Colors.orangeAccent,),
 
   ];
 

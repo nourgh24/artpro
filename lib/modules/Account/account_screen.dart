@@ -26,8 +26,6 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   void initState() {
-
-
     super.initState();
   }
 int id=AppSharedPreferences.getId ;
@@ -63,8 +61,7 @@ int id=AppSharedPreferences.getId ;
             MenuItemm(
               title: "Add Certificate",
               tap: ()  {
-            Get.to(ArtistView( role: 0,
-                apiUrl: UrlsApi.CertificateApi, ));
+            Get.to(ArtistView( role: 0,apiUrl: UrlsApi.CertificateApi,));
               },
               // image: AppAssets.profileIcon,
             ),

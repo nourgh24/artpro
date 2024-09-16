@@ -121,7 +121,7 @@ Widget build(BuildContext context) {
       body: SingleChildScrollView(
         child: Center(
           child: SizedBox(
-            height: screenHeight*0.93,
+            height: screenHeight*0.95,
             width: screenWidth,
             child: Column(
               children: [
@@ -135,99 +135,100 @@ Widget build(BuildContext context) {
                       return SizedBox();
                     }
     
-                    return Card(
-                      elevation: 2,
-                      margin:EdgeInsets.all(2) ,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                             child:CachedNetworkImage(
-                        placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey.withOpacity(0.5),
-                            highlightColor: Colors.grey,
-                            child: Container(
+                    return Column(
+                      children: [
+                        Card(
+                          elevation: 2,
+                          margin:EdgeInsets.all(2) ,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                 child:CachedNetworkImage(
+                            placeholder: (context, url) => Shimmer.fromColors(
+                                baseColor: Colors.grey.withOpacity(0.5),
+                                highlightColor: Colors.grey,
+                                child: Container(
+                                  width: double.maxFinite,
+                                  height: screenHeight*0.37,
+                                  color: Colors.grey,
+                                )),
+                            imageBuilder: (context, imageProvider) => Container(
                               width: double.maxFinite,
-                              height: screenHeight*0.5,
-                              color: Colors.grey,
-                            )),
-                        imageBuilder: (context, imageProvider) => Container(
-                          width: double.maxFinite,
-                              height: screenHeight*0.5,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
+                                  height: screenHeight*0.37,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
+                            ),
+                            fadeInDuration: const Duration(milliseconds: 4),
+                            fadeOutDuration: const Duration(milliseconds: 4),
+                            imageUrl: UrlsApi.baseimageUrl+ _controller.articledetailsModel!.article!.url!,
+                            errorWidget: (context, url, error) => Container(
+                              width: double.maxFinite,
+                                  height: screenHeight*0.37,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage('${_controller.imageUrl}'),
+                                    fit: BoxFit.cover),
+                              ),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                              ),
+                              Positioned(
+                                top: 10,
+                                left: 10,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 10,
+                                right: 10,
+                                child: IconButton(
+                                  onPressed: () {
+                                     _persistPreference(1);
+                                  },
+                                  icon: Icon(
+                                    _controller.articles_details[0].favorited ? Icons.favorite : Icons.favorite_border,
+                                    color: _controller.articles_details[0].favorited ? Colors.red : Colors.white,
+                                    size: 25,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 10,
+                                left: 20,
+                                child: Text(
+                                  _controller.articledetailsModel!.article!.title??"",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 23,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        fadeInDuration: const Duration(milliseconds: 4),
-                        fadeOutDuration: const Duration(milliseconds: 4),
-                        imageUrl: UrlsApi.baseimageUrl+ _controller.articledetailsModel!.article!.url!,
-                        errorWidget: (context, url, error) => Container(
-                          width: double.maxFinite,
-                              height: screenHeight*0.5,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('${_controller.imageUrl}'),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: IconButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                                size: 25,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            right: 10,
-                            child: IconButton(
-                              onPressed: () {
-                                 _persistPreference(1);
-                              },
-                              icon: Icon(
-                                _controller.articles_details[0].favorited ? Icons.favorite : Icons.favorite_border,
-                                color: _controller.articles_details[0].favorited ? Colors.red : Colors.white,
-                                size: 25,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            left: 20,
-                            child: Text(
-                              _controller.articledetailsModel!.article!.title??"",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
-                              ),
-                            ),
-                          ),
-                      
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-                SizedBox(height: screenHeight * 0.02),
-                Container(
+
+                        SizedBox(height: screenHeight * 0.02),
+                     Container(
                   width: screenWidth * 0.9,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CachedNetworkImage(
+                      //////////////////////////////////////////////////////////////////////////
+                       CachedNetworkImage(
                         placeholder: (context, url) => Center(
                           child: Shimmer.fromColors(
                             baseColor: Colors.grey.withOpacity(0.5),
@@ -244,13 +245,15 @@ Widget build(BuildContext context) {
                         ),
                         fit: BoxFit.cover,
                       ),
+                      ///////////////////////////////////////////////////////////////////////////////
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextButton(
+                          ///////////////////////////////////////////////////////////////////////////
+                         TextButton(
                             onPressed: () {},
                             child: Text(
-                              '${_controller.articledetailsModel!.article!.artist!.name ??""}',
+                              '${_controller.articledetailsModel!.article!.artist!.name??""}',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
@@ -259,7 +262,7 @@ Widget build(BuildContext context) {
                               ),
                             ),
                           ),
-                          Text(
+                         Text(
                             '${_controller.articledetailsModel!.article!.formattedCreationDate}',
                             style: TextStyle(
                               color: Colors.black87,
@@ -267,6 +270,7 @@ Widget build(BuildContext context) {
                               fontWeight: FontWeight.normal,
                             ),
                           ),
+                          ///////////////////////////////////////////////////////////////////////////////
                         ],
                       ),
                       SizedBox(width: screenWidth * 0.15),
@@ -331,12 +335,13 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.03),
+                /////////////////////////////////////////////////////////////////////////
                 Container(
-                  height: screenHeight * 0.37,
+                  height: screenHeight * 0.3,
                   width: screenWidth * 0.85,
                   child: SingleChildScrollView(
                     child: Text(
-                      '${_controller.articledetailsModel!.article!.description}',
+                      '${_controller.articledetailsModel!.article!.description ??""}',
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 15,
@@ -347,11 +352,12 @@ Widget build(BuildContext context) {
                     ),
                   ),
                 ),
+                ///////////////////////////////////////////////////////////////////////////
                 SizedBox(height: screenHeight * 0.05),
-                Row(
+                 Row(
                   children: [
                     SizedBox(width: screenWidth * 0.05),
-                    Container(
+                    Container(    
                       width: screenWidth * 0.5,
                       height: screenHeight * 0.06,
                       color: Colors.black12,
@@ -372,16 +378,19 @@ Widget build(BuildContext context) {
                               ),
                             ),
                             SizedBox(width: screenWidth * 0.05),
-                            Text(
+                            //////////////////////////////////////////////////////////////////////////
+                           Text(
                               '(${_controller.articledetailsModel!.article!.commentsNumber ??""})',
                               style: TextStyle(
                                 color: Colors.orange[200],
                               ),
                             ),
+                            ////////////////////////////////////////////////////////////////////////
                           ],
                         ),
                       ),
                     ),
+
                     IconButton(
                       onPressed: () {
                         () async{
@@ -393,7 +402,7 @@ Widget build(BuildContext context) {
                     DisLiked = false;
                            }} );
                         };
-                        // _likedPreference();
+                         _likedPreference();
                       },
                       icon: Icon(
                         Liked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
@@ -401,8 +410,8 @@ Widget build(BuildContext context) {
                         size: 25,
                       ),
                     ),
-                    IconButton(
 
+                    IconButton(
                        onPressed: () {
                         () async{
                         AddArticleDisLike Dislikedetails = AddArticleDisLike(DisLike: "dislike");
@@ -424,6 +433,7 @@ Widget build(BuildContext context) {
                         size: 25,
                       ),
                     ),
+                    ////////////////////////////////////////////////////////////////////////////////
                     TextButton(
                       onPressed: () {},
                       child: Text(
@@ -433,9 +443,14 @@ Widget build(BuildContext context) {
                         ),
                       ),
                     ),
+                ///////////////////////////////////////////////////////////////////////////////////////////
                   ],
                 ),
-              ],
+                      ],
+                    );
+                  }),
+                ),
+              ],            
             ),
           ),
         ),

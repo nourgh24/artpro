@@ -1,7 +1,7 @@
 class UrlsApi {
-static String baseimageUrl = 'http://192.168.193.85:8080/';
+static String baseimageUrl = 'http://192.168.9.85:8080/';
 
-static String baseUrl="http://192.168.193.85:8080/api/";
+static String baseUrl="http://192.168.9.85:8080/api/";
 static String verifyUserApi= "${baseUrl}verify";
 static String verifyArtistApi= "${baseUrl}artist/verify";
 static String CertificateApi= "${baseUrl}certificates/store/";
@@ -40,8 +40,15 @@ static String AddLikePaintingApi= "${baseUrl}paintings/interactions/";
 static String AddLikeArticleApi= "${baseUrl}articles/interactions/";
 static String AddFavouriteApi= "${baseUrl}favourite/";
 
-
 static String SearchApi= "${baseUrl}";
+
+static String GetProfileArtistApi= "${baseUrl}artist/profile";
+static String GetProfileUserApi= "${baseUrl}user/profile";
+
+static String EditProfileArtistApi= "${baseUrl}artist/edit";
+static String EditProfileUserApi= "${baseUrl}user/edit";
+
+
 
 
 }

@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart';
-import 'package:untitled5/modules/profile/profile_view.dart';
 
 class HomePage extends StatefulWidget {
    
@@ -114,7 +113,7 @@ class _HomePageState extends State<HomePage> {
 
                     IconButton(
                       onPressed: () {
-                        Get.to(ProfileView());
+                        //Get.to(ProfileView());
                       },
                       icon: Icon(
                         Icons.person,

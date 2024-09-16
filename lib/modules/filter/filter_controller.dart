@@ -50,6 +50,7 @@ class FilterController extends g.GetxController {
     try {
       filterState(FilterState.loading);
       Response response = await dioApiService.postData(
+        
         apiUrl,
         options: Options(
           headers: {

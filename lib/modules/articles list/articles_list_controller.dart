@@ -27,7 +27,7 @@ class ArticleListController extends g.GetxController {
   var articles = <AddArticlee>[].obs;
   File? image;
   String? message;
-      RxString imageUrl= 'images/13.jpg'.obs;
+  RxString imageUrl= 'images/13.jpg'.obs;
 
   final ImagePicker _picker = ImagePicker();
 

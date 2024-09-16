@@ -91,7 +91,7 @@ class _PaingingAvatarWidgetState extends State<PaingingAvatarWidget> {
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey,
-              borderRadius: BorderRadius.circular(2.w),
+              borderRadius: BorderRadius.circular(40.w),
               // border: Border.all(color: AppColors.primaryColor),
               image: DecorationImage(
                   image: FileImage(File(
@@ -129,14 +129,14 @@ class _PaingingAvatarWidgetState extends State<PaingingAvatarWidget> {
             padding: EdgeInsets.symmetric(
               horizontal: 2.w,
             ),
-            child: Card(
+           /* child: Card(
               child: IconButton(
                 onPressed: () {
                   showImageDialog(context);
                 },
                 icon: Icon(Icons.edit,size: 20,)
               ),
-            ),
+            ),*/
           ),
       ],
     );
