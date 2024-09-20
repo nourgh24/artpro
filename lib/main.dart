@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:sizer/sizer.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'package:untitled5/modules/filter/filter.dart';
@@ -6,6 +9,9 @@ import 'package:get/get.dart' ;
 import 'package:provider/provider.dart';
 import 'package:untitled5/modules/gallery/gallery_display_view_controller.dart';
 import 'package:untitled5/modules/profiles/profiles.dart';
+import 'Services/Constants/app_constants.dart';
+import 'Services/Notification/notification.dart';
+import 'firebase_options.dart';
 import 'modules/Painting list/add_new_painting.dart';
 import 'modules/Painting list/painting_list.dart';
 import 'modules/Profile Edit/profile_edit.dart';
@@ -31,12 +37,16 @@ import 'modules/welcome/welcome_controller.dart';
 import 'package:email_otp/email_otp.dart';
 void main() async {
 
-GalleryDisplayViewController galleryController = GalleryDisplayViewController();
+  GalleryDisplayViewController galleryController = GalleryDisplayViewController();
   Get.put(galleryController);
 
   WidgetsFlutterBinding.ensureInitialized();
   await AppSharedPreferences.init();
-  print("what is the token ${AppSharedPreferences.getToken}");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  if (!Platform.isWindows) await Messaging.initFCM();
+   print("what is the token ${AppSharedPreferences.getToken}");
    print("what is the role ${AppSharedPreferences.getRole}");
    print("what is the id ${AppSharedPreferences.getId}");
 
@@ -51,6 +61,10 @@ GalleryDisplayViewController galleryController = GalleryDisplayViewController();
 }
 class MyApp extends StatelessWidget {
 
+
+  const MyApp({super.key});
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -61,6 +75,7 @@ class MyApp extends StatelessWidget {
           // home: ConfrimCode(email: "nourghanem756@gmail.com"),
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.leftToRightWithFade,
+          navigatorKey: Keys.navigatorKey,
           getPages: [
             // GetPage(name: '/Loginn/', page: () => Loginn()),
             // GetPage(name: '/Registerr/', page: () => Registerr()),
