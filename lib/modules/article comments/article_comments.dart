@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:untitled5/Services/Network/urls_api.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'article_comments_controller.dart';
 import 'article_comments_service.dart';
@@ -74,6 +77,34 @@ class _CommentViewState extends State<CommentView> {
                             //hoverColor,
                             //splashColor,
                             leading:
+                           /* ClipOval(
+                                     child: CachedNetworkImage(
+                                       placeholder: (context, url) => Center(
+                                         child: Shimmer.fromColors(
+                                           baseColor: Colors.grey.withOpacity(0.5),
+                                           highlightColor: Colors.grey,
+                                           child: const CircleAvatar(
+                                             radius: 18,
+                                           ),
+                                         ),
+                                       ),
+                                       imageUrl: (commentController
+                                      .commentModel?.comment?[index].user?.image?.isNotEmpty ?? false)
+                                           ? UrlsApi.baseimageUrl +commentController
+                                      .commentModel!.comment![index].user!.image!
+                                           : "", 
+                                       errorWidget: (context, url, error) => const CircleAvatar(
+                                         radius: 18,
+                                         backgroundImage: AssetImage('images/10.jpg'),
+                                       ),
+                                       imageBuilder: (context, imageProvider) => CircleAvatar(
+                                         radius: 18,
+                                         backgroundImage: imageProvider,
+                                       ),
+                                       fit: BoxFit.cover,
+                                     ),
+                                   ),
+*/
                              CircleAvatar(
                               radius: 15,
                               backgroundImage: NetworkImage(commentController
@@ -109,7 +140,7 @@ class _CommentViewState extends State<CommentView> {
                                 ),
                                 Row(
                                   children: [
-                                    SizedBox(width: 130,),
+                                    SizedBox(width: 150,),
                                     if (AppSharedPreferences.getId ==
                                         commentController.commentModel!
                                             .comment![index].user!.id) ...[
@@ -179,16 +210,7 @@ class _CommentViewState extends State<CommentView> {
                                         },
                                       ),
                                     ],
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.thumb_up,
-                                        size: 15,
-                                      ),
-                                      onPressed: () {
-                                        // commentController.likeComment(comment.id);
-                                      },
-                                    ),
-                                    // Text('${comment.likes}'),
+                                    
                                   ],
                                 ),
                               ],

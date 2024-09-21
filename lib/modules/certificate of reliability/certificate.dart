@@ -35,7 +35,7 @@ class _ArtistViewState extends State<ArtistView> {
             TextButton(onPressed: (){
                WidgetsBinding.instance.addPostFrameCallback((_) {
               Get.offAll(Navpar(  
-                 role: 1,
+               //  role: 1,
                  apiUrl: UrlsApi.homeApi,
                               ));
                });
@@ -98,7 +98,7 @@ class _ArtistViewState extends State<ArtistView> {
                           Get.snackbar('Success', 'Certificate added successfully', snackPosition: SnackPosition.BOTTOM,
                            backgroundColor: Color.fromARGB(255, 212, 243, 213));
                             Get.offAll(Navpar(  
-                               role: 0,
+                               //role: 0,
                                apiUrl: UrlsApi.homeApi,
                               ));
                         

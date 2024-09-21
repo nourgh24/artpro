@@ -156,23 +156,31 @@ class _ProfileState extends State<Profiles> {
                                  child: Container(
                                   width: screenheight *0.2,
                                   height: screenheight*0.2,
-                                   child: CachedNetworkImage(
-                                  placeholder: (context, url) => Center(
-                                    child: Shimmer.fromColors(
-                                      baseColor: Colors.grey.withOpacity(0.5),
-                                      highlightColor: Colors.grey,
-                                        child: const CircleAvatar(
-                                           radius: 60,
-                                              ),
+                                  child: ClipOval(
+                                     child: CachedNetworkImage(
+                                       placeholder: (context, url) => Center(
+                                         child: Shimmer.fromColors(
+                                           baseColor: Colors.grey.withOpacity(0.5),
+                                           highlightColor: Colors.grey,
+                                           child: const CircleAvatar(
+                                             radius: 60,
+                                           ),
                                          ),
-                                          ),
-                                 imageUrl:UrlsApi.baseimageUrl+ _controller.getprofilesmodel!.Profiles!.image?? "",
-                                    errorWidget: (context, url, error) => CircleAvatar(
-                                    radius: 60,
-                                      backgroundImage: AssetImage('images/10.jpg'),
-                                         ),
-                                        fit: BoxFit.cover,
-                                         ),
+                                       ),
+                                       imageUrl: (_controller.getprofilesmodel?.Profiles?.image?.isNotEmpty ?? false)
+                                           ? UrlsApi.baseimageUrl + _controller.getprofilesmodel!.Profiles!.image!
+                                           : "", 
+                                       errorWidget: (context, url, error) => const CircleAvatar(
+                                         radius: 60,
+                                         backgroundImage: AssetImage('images/10.jpg'),
+                                       ),
+                                       imageBuilder: (context, imageProvider) => CircleAvatar(
+                                         radius: 60,
+                                         backgroundImage: imageProvider,
+                                       ),
+                                       fit: BoxFit.cover,
+                                     ),
+                                   ),
                                  ),
                                  /* child: CircleAvatar(
                                   radius: 60,

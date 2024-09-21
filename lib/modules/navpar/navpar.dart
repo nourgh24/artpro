@@ -14,9 +14,11 @@ import '../painting details/painting _details.dart';
 import '../painting_home_page/page_home.dart';
 
 class Navpar extends StatefulWidget {
-   final int role;
+   //final int role;
   final String   apiUrl;
-  const Navpar({required this.apiUrl,required this.role,super.key});
+  const Navpar({required this.apiUrl,
+  //required this.role,
+  super.key});
   
 
   @override

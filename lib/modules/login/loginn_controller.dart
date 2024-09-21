@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' as g;
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/utils.dart';
+import 'package:untitled5/modules/navpar/navpar.dart';
 
 class LoginnController extends g.GetxController {
   DioApiService dioApiService = DioApiService();
@@ -38,11 +39,17 @@ class LoginnController extends g.GetxController {
           print("what is the token  ${AppSharedPreferences.getToken}");
           print("wpppppppppp  ${AppSharedPreferences.getToken}");
 
-           Get.to(ConfrimCode(
+          /* Get.to(ConfrimCode(
         role: 1,
          apiUrl: UrlsApi.verifyUserApi,
          email:"${emailController.text}" ,
-          ));
+          ));*/
+           Get.offAll(Navpar(  
+                              // role: 1,
+                               apiUrl: UrlsApi.homeApi,
+                              ));
+
+
           logInState(LogInState.succsesful);
             }
           if (activeIndex == 0) {
@@ -52,11 +59,15 @@ class LoginnController extends g.GetxController {
           print("what is the token  ${AppSharedPreferences.getToken}");
           print("wpppppppppp  ${AppSharedPreferences.getToken}");
 
-           Get.to(ConfrimCode(
+          /* Get.to(ConfrimCode(
         role: 0,
          apiUrl: UrlsApi.verifyArtistApi,
          email:"${emailController.text}" ,
-          ));
+          ));*/
+           Get.offAll(Navpar(  
+                              // role: 0,
+                               apiUrl: UrlsApi.homeApi,
+                              ));
 
             logInState(LogInState.error);
           }

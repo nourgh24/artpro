@@ -93,12 +93,12 @@ class Welcome extends GetView<WelcomeController> {
                         if (AppSharedPreferences.hasToken) {
                           if(AppSharedPreferences.getRole==0){
                           Get.to(Navpar(
-                           role: 0,
+                           //role: 0,
                            apiUrl: UrlsApi.homeApi,
                           ));
                           }if(AppSharedPreferences.getRole==1) {
                           Get.to(Navpar(
-                           role: 1,
+                           //role: 1,
                            apiUrl: UrlsApi.homeApi,
                           ));
                           }

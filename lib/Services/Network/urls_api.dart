@@ -1,7 +1,7 @@
 class UrlsApi {
-static String baseimageUrl = 'http://192.168.9.85:8080/';
+static String baseimageUrl = 'http://192.168.11.85:8080/';
 
-static String baseUrl="http://192.168.9.85:8080/api/";
+static String baseUrl="http://192.168.11.85:8080/api/";
 static String verifyUserApi= "${baseUrl}verify";
 static String verifyArtistApi= "${baseUrl}artist/verify";
 static String CertificateApi= "${baseUrl}certificates/store/";

@@ -149,7 +149,7 @@ class AddArticle extends StatelessWidget {
                 SizedBox(height: screenheight * 0.02),
                 TextFormField(
                   maxLines: 10,
-                  minLines: 1,
+                  minLines: 4,
                   style: TextStyle(fontSize: 15),
                   controller: articleTextController,
                   decoration: InputDecoration(

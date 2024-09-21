@@ -161,13 +161,17 @@ class _ConfrimCodeState extends State<ConfrimCode> {
                   
                  if(_controller.comfirmState.value==ComfirmState.succsesful){
                    if (AppSharedPreferences.getRole == 0) {
+                    /* Get.offAll(Navpar(  
+                               role: 0,
+                               apiUrl: UrlsApi.homeApi,
+                              ));*/
                       Get.to(ArtistView(
                             role: 0,
                             apiUrl: UrlsApi.CertificateApi,
                     ));
                        }else {
                              Get.offAll(Navpar(  
-                               role: 1,
+                              // role: 1,
                                apiUrl: UrlsApi.homeApi,
                               ));
                               }

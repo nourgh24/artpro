@@ -225,7 +225,7 @@ class _GalleryDisplayViewState extends State<GalleryDisplayView> {
                                           padding: const EdgeInsets.all(8.0),
                                          child: 
                                           Text(
-                                            "النحت المعاصر",
+                                           "النحت المعاصر",
                                            // galleryController.gallerydisplaymodel!.gallerys![0].name ?? 'Unknown Title',
                                             style: TextStyle(
                                               fontSize: 15,
