@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
 import 'package:untitled5/modules/Account/account_screen.dart';
+import 'package:untitled5/modules/Favourite%20list/favourite_list.dart';
 import 'package:untitled5/modules/Painting%20list/add_new_painting.dart';
 import 'package:untitled5/modules/Painting%20list/painting_list.dart';
 import 'package:untitled5/modules/profiles/profiles.dart';
@@ -32,8 +33,8 @@ class _NavparState extends State<Navpar> {
     GalleryList(),
    //Profiles(),
     Profiles(artistId: AppSharedPreferences.getId,),
-    AccountScreen(),
-
+    FavouriteList(),
+    //AccountScreen(),
   ];
   int _selectedIndex=0;
 

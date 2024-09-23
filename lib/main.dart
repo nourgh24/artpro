@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sizer/sizer.dart';
 import 'package:untitled5/SharedPreferences/SharedPreferencesHelper.dart';
+import 'package:untitled5/modules/Favourite%20list/favourite_list.dart';
 import 'package:untitled5/modules/filter/filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' ;
@@ -102,6 +103,8 @@ class MyApp extends StatelessWidget {
             //GetPage(name: '/View', page: () =>  View(),),
             //GetPage(name: '/Profiles', page: () => const Profiles(),),
             GetPage(name: '/ProfileEdit', page: () => ProfileEdit(),),
+            GetPage(name: '/FavouriteList', page: () => FavouriteList(),),
+
 
 
 

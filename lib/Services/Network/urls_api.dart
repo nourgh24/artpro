@@ -48,6 +48,10 @@ static String GetProfileUserApi= "${baseUrl}user/profile";
 static String EditProfileArtistApi= "${baseUrl}artist/edit";
 static String EditProfileUserApi= "${baseUrl}user/edit";
 
+static String ListFavourityUserApi= "${baseUrl}favourite/show";
+static String ListFavourityArtistApi= "${baseUrl}favourite/showFromArtist";
+
+
 
 
 

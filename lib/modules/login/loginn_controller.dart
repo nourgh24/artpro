@@ -39,7 +39,7 @@ class LoginnController extends g.GetxController {
           print("what is the token  ${AppSharedPreferences.getToken}");
           print("wpppppppppp  ${AppSharedPreferences.getToken}");
 
-          /* Get.to(ConfrimCode(
+         /*  Get.to(ConfrimCode(
         role: 1,
          apiUrl: UrlsApi.verifyUserApi,
          email:"${emailController.text}" ,
@@ -59,11 +59,11 @@ class LoginnController extends g.GetxController {
           print("what is the token  ${AppSharedPreferences.getToken}");
           print("wpppppppppp  ${AppSharedPreferences.getToken}");
 
-          /* Get.to(ConfrimCode(
+           Get.to(ConfrimCode(
         role: 0,
          apiUrl: UrlsApi.verifyArtistApi,
          email:"${emailController.text}" ,
-          ));*/
+          ));
            Get.offAll(Navpar(  
                               // role: 0,
                                apiUrl: UrlsApi.homeApi,
